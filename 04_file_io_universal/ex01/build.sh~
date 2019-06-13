@@ -1,0 +1,3 @@
+#! /bin/bash
+
+gcc -Wall -o my_tee my_tee.c -I../../../tlpi-dist/include/ ../../../tlpi-dist/libtlpi.a

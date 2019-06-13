@@ -1,0 +1,3 @@
+#! /bin/bash
+
+gcc -Wall -o -S mem_segments.s mem_segments.c ../../tlpi-dist/libtlpi.a -I../../tlpi-dist/lib 

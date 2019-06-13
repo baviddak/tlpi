@@ -1,0 +1,3 @@
+#! /bin/bash
+
+gcc -Wall -S -o my_readv.s  my_readv.c ../../../tlpi-dist/libtlpi.a -I../../../tlpi-dist/lib

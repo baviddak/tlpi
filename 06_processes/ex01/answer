@@ -1,0 +1,1 @@
+The reason that the compiled program is much smaller than the 10 MB is that the uninitialized data does not have any memory actually assigned to it.

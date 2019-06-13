@@ -1,0 +1,21 @@
+Chapter Notes
+-------------
+Because of the complexity of Process Credential topics, this requires some Note taking and more summary.
+
+9.1 Real User ID and Real Group ID
+----------------------------------
+- The real user and group ID identify the user and groupd to which the process belongs
+- When a new process is created, (e.g. when the shell executes a program), it inherits these identifiers from its parent.
+
+9.2 Effective User ID and Effective Group ID
+--------------------------------------------
+- the effective user ID and group ID, in conjuction with the supplementary are used to determine the permissions granted to a process when it tries to perform various operations (i.e. system calls).
+- the effective IDs can assume different values from the real IDs in two ways: system calls (9.7), or execution of set-user-ID and set-group-ID programs.
+
+9.3 Set-User-ID and Set-Group-ID Programs
+-----------------------------------------
+- A set-user-ID program sets the process's effective user ID to the same value as the user ID (owner) of the executable file.
+- an executable file has two special pezrmission bits (which are set using the chmod command) the set-user-ID bit and the set-group-ID bit.
+
+9.4 Saved Set-User-ID and Saved Set-Group-ID
+--------------------------------------------

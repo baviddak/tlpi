@@ -1,0 +1,3 @@
+#! /bin/bash
+
+gcc -Wall -o my_getpwnam getpwnam.c ../../../tlpi-dist/libtlpi.a -I../../../tlpi-dist/lib
