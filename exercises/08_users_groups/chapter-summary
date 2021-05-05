@@ -1,6 +1,0 @@
-Chapter Summary
----------------
-
-Each user has a unique login name and an associated numeric user ID. Users can belong to one or more groups, each of which also has a unique name and an associated numeric identifier. The primary purpose of these identifiers is to establish ownership of various system resources (e.g. files) and permissions for accessing them.
-A user's name and ID are defined in the /etc/passwd file, which also contians other information about the user. A user's group memberships are defined by fields in the /etc/passwd and /etc/group files. A further file, /etc/shadow, which can be read only by privledged processes, is used to separate the sensitive password information from the publicly available user information in /etc/passwd. Various library functions are provided for retrieving information from each of these files.
-The crypt() function encrypts a password in the same manner as the standard login program, which is useful for programs that need to authenticate users.

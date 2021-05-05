@@ -1,4 +1,0 @@
-#! /bin/bash
-
-gcc -Wall -S -o list_procID.s list_procID.c ../../../tlpi-dist/libtlpi.a -I../../../tlpi-dist/lib
-
