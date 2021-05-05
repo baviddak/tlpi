@@ -1,3 +1,0 @@
-When we execute the following code, which attempts to diplay the usernames for two different user IDs, we find that it displays the same username twice. Why is this?
-
-Ans: the getpwuid function is non reentrant. This means that when the two calls to getpwuid are called in the same printf statement, they each kick off in a new thread and because the function modifies a statically allocated struct, one function may get interrupted right before its return statement while the other one completes. then the other will continue and end up printing the same struct values.
