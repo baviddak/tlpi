@@ -1,6 +1,11 @@
-/* Implement readv() and writev() using read(), write() and suitable functions from the malloc package (Section 7.1.2). */
+/* Implement readv() and writev() using read(), write() and suitable functions 
+ * from the malloc package (Section 7.1.2). 
+ */
 
-/* Usage: my_readv_writev inputfile outputfile - all the contents from input file are transferred over to output file but first are put into memory via my_readv and my_writev */
+/* Usage: my_readv_writev inputfile outputfile - all the contents from input file 
+ * are transferred over to output file but first are put into memory via my_readv 
+ * and my_writev 
+ */
 
 
 #include <sys/stat.h>
