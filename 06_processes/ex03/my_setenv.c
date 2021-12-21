@@ -14,7 +14,9 @@ extern char **environ;
 
 int my_setenv(const char *name, const char *value, int overwrite){
 
-  /* Since local_name and local_value are allocated on the heap, we don't have to worry about the environment variables disappearing once the functions return */
+  /* Since local_name and local_value are allocated on the heap, we don't have to 
+   * worry about the environment variables disappearing once the functions return 
+   */
   
   char * nv_pair = (char *)malloc(sizeof(name) + sizeof(value) + sizeof(char));
   char * equal = "=";
