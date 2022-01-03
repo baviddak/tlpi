@@ -5,10 +5,10 @@
 /* To create duplicate file descriptors, use dup()*/
 
 /* Usage: offset_status_flags filename - filename is the name of the file which 
-* we will create a file descriptor for, then create a duplicate file descriptor from
-* that. We can then confirm that those two file descriptrs have the same status flags 
-* and the same offset 
-*/
+ * we will create a file descriptor for, then create a duplicate file descriptor from
+ * that. We can then confirm that those two file descriptrs have the same status flags 
+ * and the same offset 
+ */
 
 #include <sys/stat.h>
 #include <fcntl.h>
