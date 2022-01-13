@@ -1,3 +1,2 @@
-TestIgnore.file
-tlpi-dist/*
-tlpi-201025*
+./*.txt
+./*.exe

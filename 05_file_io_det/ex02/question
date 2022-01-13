@@ -1,9 +1,0 @@
-Question:
-
-Write a program that opens an existing file for writing with the O_APPEND flag, and then seeks to the begninning of the file before writing some data. Where does the data appear in the file? Why?
-
-Answer:
-
-The data appears at the end of the file, even if the program seeks to the beginning of the file before writing.
-
-Why? Because the write operation with the O_APPEND flag guaruntees that the seek and write happen atomically. When write is called with the O_APPEND flag, the file offset is set to the end of the file again.
