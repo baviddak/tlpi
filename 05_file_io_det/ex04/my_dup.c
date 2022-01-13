@@ -56,8 +56,6 @@ int my_dup2(int oldfd, int newfd){
 
   }
 
-
-
 }
 
 
