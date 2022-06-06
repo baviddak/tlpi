@@ -13,9 +13,13 @@
 #define COUNT 20
 #endif
 
-/* Write a program that opens an existing file for writing with the O_APPEND flag, and then seeks to the beginning of the file before writing some data. Where does the data appear in the file? Why? */
+/* Write a program that opens an existing file for writing with the O_APPEND flag, and then seeks to the 
+ * beginning of the file before writing some data. Where does the data appear in the file? Why? 
+ */
 
-/* Usage: write_beginning file_name input_text - input text is what is written to the file, file_name is the file to be written to  */
+/* Usage: write_beginning file_name input_text - input text is what is written to the file, file_name is 
+ * the file to be written to  
+ */
 
 int main(int argc, char * argv[]){
 
