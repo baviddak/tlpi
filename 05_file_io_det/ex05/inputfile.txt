@@ -1,0 +1,1 @@
+This is an input file! There will be two file descriptors pointed to this file and they should have the same file offset and the same status flags

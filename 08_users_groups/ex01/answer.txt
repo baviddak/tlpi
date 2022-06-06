@@ -1,0 +1,13 @@
+When we execute the following code, which attempts to diplay the usernames for two different user IDs, we find that it displays the same username twice. Why is this?
+
+printf("%s %s", getpwuid(uid1)->pw_name, getpwuid(uid2)->pw_name);
+
+- Both getpwuid() and getpwname() return a pointer to a statically allocated structure. This structure is overwritten on each call to either of these functions (or to the getpwent() function)...
+
+- Because they return a pointer to statically allocated memory, getpwname() and getpwuid() are not reentrant. In fact, the situation is even more complex, since the returned passwd structure contains pointers to other information (e.g., the pw_name field) that is also statically allocated.
+
+- A function is said to reentrant if it can safely be simultaneously executed by multiple threads of execution in the same process. In this context, "safe" means that the function acheives its expected result, regardless of the state of execution of any other thread.
+
+- A function may be nonreentrant if it updates global or static data structures. (A function that employs only local variables is guarunteed to be reentrant.) If two invocations of (i.e. two threads executing) the function simultaneously attempt to update the same global variable or data structure, then these updates are likely to interfere with each other and produce incorrect results. 
+
+Answer: The getpwuid function is nonreentrant. This means that when the two calls to getpwuid are called in the same printf statement, they each kick off in a new thread and because the function modifies a static data structure, one function may get interrupted right before its return statement while the other one completes. Then the other will continue and end up printing the same struct values.
