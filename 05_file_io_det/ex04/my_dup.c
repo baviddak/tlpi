@@ -1,4 +1,10 @@
-/* Implement dup() and dup2() using fcntl() and, where necessary, close(). (You may ignore the fact that dup2() and fcntl() return different errno values for some error cases.) For dup2(), remember to handle the special case where oldfd equals newfd. In this case, you should check whether oldfd is valid, which can be done by, for example, checking if fcntl(oldfd, F_GETFL) succeeds. If oldfd is not valid, then the function should return -1 with errno set to EBADF. */
+/* Implement dup() and dup2() using fcntl() and, where necessary, close(). (You may 
+ * ignore the fact that dup2() and fcntl() return different errno values for some error 
+ * cases.) For dup2(), remember to handle the special case where oldfd equals newfd. In 
+ * this case, you should check whether oldfd is valid, which can be done by, for example, 
+ * checking if fcntl(oldfd, F_GETFL) succeeds. If oldfd is not valid, then the function 
+ * should return -1 with errno set to EBADF. 
+ */
 
 
 #include <sys/stat.h>
@@ -30,7 +36,12 @@ int my_dup(int oldfd){
 }
 
 int my_dup2(int oldfd, int newfd){
-  /* The dup2() system call makes a duplicate of the file descriptor given in oldfd using the descriptor number supplied in newfd. If the file descriptor specified in newfd is already open, dup2() closes it first. (Any error that occurs during this close is silently ignored.) The closing and reuse of newfd are performed atomically, which avoids the possibility that newfd is reused between the two steps in a signalhandler or a parallelthread that allocates a file descriptor. */
+  /* The dup2() system call makes a duplicate of the file descriptor given in oldfd using the descriptor number 
+     supplied in newfd. If the file descriptor specified in newfd is already open, dup2() closes it first. (Any error 
+     that occurs during this close is silently ignored.) The closing and reuse of newfd are performed atomically, which 
+     avoids the possibility that newfd is reused between the two steps in a signalhandler or a parallelthread that 
+     allocates a file descriptor. 
+  */
 
   /* Returns (new) file descriptor on success, or -1 on error */
 
