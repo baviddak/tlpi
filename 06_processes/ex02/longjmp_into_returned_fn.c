@@ -2,6 +2,8 @@
  * that has already returned 
  */
 
+/* Usage: ./longjmp_into_returned_fn.exe */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <setjmp.h>
