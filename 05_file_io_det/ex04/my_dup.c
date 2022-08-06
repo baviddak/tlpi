@@ -42,7 +42,6 @@ int my_dup(int oldfd){
 	return(returnfd);
 }
 
-
 /* The dup2() system call makes a duplicate of the file descriptor given in 
  * oldfd using the descriptor number supplied in newfd. If the file descriptor 
  * specified in newfd is already open, dup2() closes it first. (Any error that 
