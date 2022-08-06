@@ -5,7 +5,6 @@
 #include "tlpi_hdr.h"
 #include <pwd.h>
 
-
 void print_pwd(struct passwd *pr_pwd){
 	if (pr_pwd != NULL) {
 		printf("Login name:\t%s\n", pr_pwd->pw_name);
