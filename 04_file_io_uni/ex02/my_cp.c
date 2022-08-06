@@ -5,7 +5,6 @@
 
 /* Usage: ./my_cp.exe target_file.txt source_file.txt */
 
-
 int main() {
 	return 0;
 }
