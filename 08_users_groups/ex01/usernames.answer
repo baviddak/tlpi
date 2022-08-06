@@ -27,5 +27,6 @@ are likely to interfere with each other and produce incorrect results.
 Answer: The getpwuid function is nonreentrant. This means that when the two calls 
 to getpwuid are called in the same printf statement, they each kick off in a new 
 thread and because the function modifies a static data structure, one function 
-may get interrupted right before its return statement while the other one completes. 
-Then the other will continue and end up printing the same struct values.
+may get interrupted right before its return statement while the other one 
+completes. Then the other will continue and end up printing the same struct 
+values.
