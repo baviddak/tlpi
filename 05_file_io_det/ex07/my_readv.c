@@ -45,6 +45,34 @@ ssize_t my_readv(int fd, const struct iovec *iov, int iovcnt){
 	return(total_size);
 }
 
+
+ssize_t my_writev(int fd, const struct iovec *iov, int iovcnt){
+	int num_written;
+	int total_written = 0;
+	
+	for (int i=0; i<iovcnt; i++){
+		if((num_written = write(fd, iov[i].iov_base, iov[i].iov_len)) == -1){
+			printf("write has returned -1\n");
+			return(-1);
+		}
+		if(num_written < iov[i].iov_len){
+			printf("The number of bytes written is less than the desired.\n");
+			return(-1);
+		}
+		total_written += num_written;
+		num_written = 0;
+	}
+	return(total_written);
+}
+
+void test_my_writev(){
+
+}
+
+void test_my_readv(){
+
+}
+
 int main(int argc, char * argv[]){
 	/* First argument is the file to be written to */
 	
