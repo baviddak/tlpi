@@ -1,12 +1,9 @@
-/* 
- * 
-*/
-
-/* Usage: ./atomic_append.exe filename num-bytes [x] 
- * 
+/* ... This program should wopen the specified filename (creating if necessary)
+ * and append num-bytes to the file by using write() to write a byte at a time. 
+ * (cont'd)
  */
 
-
+/* Usage: ./atomic_append.exe filename num-bytes [x] */
 
 #include <sys/stat.h>
 #include <fcntl.h>
