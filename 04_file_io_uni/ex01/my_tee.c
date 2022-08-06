@@ -1,4 +1,8 @@
-/* Solution for the programming problem in exercise 1, chapter 4 */
+/* Implement tee using I/O system calls. Implement the -a command-line option
+ * which causes tee to append to the end of a file if it already exists. (Refer
+ * to Appendix B)
+ */
+
 /* Usage: ./my_tee.exe [-a] output.txt < input.txt */
 
 #include <sys/stat.h>
