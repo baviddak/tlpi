@@ -1,3 +1,13 @@
+/* 
+ * 
+*/
+
+/* Usage: ./atomic_append.exe filename num-bytes [x] 
+ * 
+ */
+
+
+
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <ctype.h>
