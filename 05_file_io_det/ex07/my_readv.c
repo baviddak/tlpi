@@ -2,9 +2,8 @@
  * from the malloc package (Section 7.1.2). 
  */
 
-/* Usage: ./my_readv.exe inputfile outputfile 
- * all the contents from input file are transferred over to output file but 
- * first are put into memory via my_readv and my_writev 
+/* Usage: ./my_readv.exe readfile.txt
+ * read the contents from readfile.txt
  */
 
 #include <sys/stat.h>
@@ -45,39 +44,11 @@ ssize_t my_readv(int fd, const struct iovec *iov, int iovcnt){
 	return(total_size);
 }
 
-
-ssize_t my_writev(int fd, const struct iovec *iov, int iovcnt){
-	int num_written;
-	int total_written = 0;
-	
-	for (int i=0; i<iovcnt; i++){
-		if((num_written = write(fd, iov[i].iov_base, iov[i].iov_len)) == -1){
-			printf("write has returned -1\n");
-			return(-1);
-		}
-		if(num_written < iov[i].iov_len){
-			printf("The number of bytes written is less than the desired.\n");
-			return(-1);
-		}
-		total_written += num_written;
-		num_written = 0;
-	}
-	return(total_written);
-}
-
-void test_my_writev(){
-
-}
-
-void test_my_readv(){
-
-}
-
 int main(int argc, char * argv[]){
-	/* First argument is the file to be written to */
+	/* Test my_readv */
 	
 	if(argc != 2 || strcmp(argv[1], "--help") == 0){
-		usageErr("%s input_file output_file\n", argv[0]);
+		usageErr("%s readfile \narg count is %d\n", argv[0], argc);
 	}
 	
 	int flags = O_RDONLY;
@@ -92,6 +63,7 @@ int main(int argc, char * argv[]){
 	int num_read;
 	int total_requested = 0;
 	
+	/* set up the iov */
 	struct iovec iov[6];
 	iov[0].iov_len = 2;
 	iov[1].iov_len = 4;
@@ -105,6 +77,7 @@ int main(int argc, char * argv[]){
 		total_requested += iov[i].iov_len;
 	}
 	
+	/* read from the file */
 	if((num_read = my_readv(fd, iov, 6)) == -1){
 		return(-1);
 	}
@@ -120,7 +93,6 @@ int main(int argc, char * argv[]){
 	for(int i=0;i<6;i++){
 		free(iov[i].iov_base);
 	}
-	/* --- */
 	
 	return(EXIT_SUCCESS);
 }

@@ -2,11 +2,9 @@
  * from the malloc package (Section 7.1.2). 
  */
 
-/* Usage: ./my_writev.exe inputfile outputfile
- * all the contents from input ile are transferred over to output file but first 
- * are put into memory via my_readv and my_writev 
+/* Usage: ./my_writev.exe outputfile
+ * write content of some buffers to the file
  */
-
 
 #include <sys/stat.h>
 #include <fcntl.h>
@@ -74,10 +72,14 @@ int main(int argc, char * argv[]){
 	for(int i=0;i<4;i++){
 		num_to_write += iov[i].iov_len;
 	}
+
 	printf("The number of bytes to write to the file is %d\n", num_to_write);
+
+	/* write the buffers to the file */
 	if((num_written = my_writev(fd, iov, 4)) == -1){
 		errExit("write");
 	}
+
 	if(num_written < num_to_write){
 		printf("The number of bytes written to the file is less that what was desired.\n");
 		return(-1);
