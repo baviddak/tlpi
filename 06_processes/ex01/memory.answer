@@ -1,5 +1,5 @@
-Compilethe program in listin 6-1 (mem_segments.c). Although the program contains
-an array that is 10 MB, the executable file is much smaller. Why?
+Compile the program in listin 6-1 (mem_segments.c). Although the program 
+contains an array that is 10 MB, the executable file is much smaller. Why?
 
 The reason that the compiled program is much smaller than the 10 MB is that the 
 uninitialized data does not have any memory actually assigned to it.
