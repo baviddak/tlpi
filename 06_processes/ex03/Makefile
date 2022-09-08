@@ -14,8 +14,8 @@ HDR = my_envlib.h
 SRC = main.c my_envlib.c
 
 # Compile
-envlib.exe: $(SRC) $(ARCH) $(HDR)
+my_envlib.exe: $(SRC) $(ARCH) $(HDR)
 	$(CC) $(CFLAGS) -o $@ $(SRC) $(ARCH)
 
 clean: 
-	rm -f core envlib.exe
+	rm -f core my_envlib.exe
