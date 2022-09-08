@@ -9,7 +9,6 @@
 
 #define _GNU_SOURCE
 #include <stdlib.h>
-#include <string.h>
 
 #include "tlpi_hdr.h"
 #include "my_envlib.h"

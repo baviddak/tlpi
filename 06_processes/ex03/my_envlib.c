@@ -1,5 +1,8 @@
 #include <stdlib.h>
+#include <string.h>
+
 #include "my_envlib.h"
+#include "tlpi_hdr.h"
 
 extern char **environ;
 
