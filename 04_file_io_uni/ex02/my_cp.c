@@ -5,6 +5,8 @@
 
 /* Usage: ./my_cp.exe target_file.txt source_file.txt */
 
+#include "tlpi_hdr.h"
+
 int main() {
-	return 0;
+	return (EXIT_SUCCESS);
 }
