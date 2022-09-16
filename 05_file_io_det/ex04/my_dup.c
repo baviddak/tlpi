@@ -81,8 +81,8 @@ int my_dup2(int oldfd, int newfd){
 }
 
 int main(int argc, char * argv[]){
-  /*Here we will call the two functions to test them out*/
-  
-  return(EXIT_SUCCESS);
+	/*Here we will call the two functions to test them out*/
+	
+	return(EXIT_SUCCESS);
 }
 
