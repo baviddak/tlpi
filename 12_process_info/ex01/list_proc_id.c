@@ -25,14 +25,7 @@
 #include "ugid_functions.h"
 
 #define FILEPATH_MAX 100
-#define LINE_MAX 40
-#define FILEBUF_MAX 200
-
-
-struct uid_info {
-   char type[50];
-   char value[50];
-};
+#define LINE_MAX 50
 
 int is_number(char *in_str) {
 
@@ -40,30 +33,24 @@ int is_number(char *in_str) {
 
     for (int i=0;i<length; i++) {
         if (!isdigit(in_str[i])) {
-            // printf ("Entered input is not a number\n");
             return(-1);
         }
 	}
 
-    // printf ("Given input is a number\n");
 	return(0);
 }
 
 
 int main(int argc, char *argv[]){
 	int uid;
-	int procuid;
-	int status_fd;
 	DIR *dirp;
 	FILE *pid_fstream;
 	struct dirent *direntp;
 	struct stat *stat_buf = (struct stat *)(malloc(sizeof(struct stat)));
 	const char *procdir="/proc";
 	char filepath_buf[FILEPATH_MAX];
-	char **pid_info;
 	char *linebuf;
 	char *token;
-	char *line_token;
 	size_t len = 0;
 
 	// validate command
@@ -73,13 +60,16 @@ int main(int argc, char *argv[]){
 	
 	// get the uid from username
 	uid = userIdFromName(argv[1]);
-	printf("The uid is %d", uid);
+	printf("The uid is %d\n", uid);
 	
 	// open the /proc dir
 	dirp = opendir(procdir);
 	errno = 0;
 	
 	while((direntp = readdir(dirp)) != NULL){
+		int procuid_r;
+		char procname[LINE_MAX];
+		char procuid[LINE_MAX];
 		
 		// ignore this and parent folder
 		if(strcmp(direntp->d_name, ".") == 0 || strcmp(direntp->d_name, "..") == 0){
@@ -113,19 +103,26 @@ int main(int argc, char *argv[]){
 
 		// read in the line, parse the uid
 		while (getline(&linebuf, &len, pid_fstream) != -1) {
+			
 			if (strstr(linebuf, "Name:")) {
-				printf("%s\n", linebuf);
+				strcpy(procname, linebuf);
 			}
 			if (strstr(linebuf, "Uid:")) {
-				printf("%s\n", linebuf);
-				char * token = strtok(linebuf, " ");
+				strcpy(procuid, linebuf);
 
-				for (int i=0;i<2;i++) {
-					printf( " %s\n", token ); 
-					token = strtok(NULL, " ");
+				// get the real uid of the process
+				token = strtok(linebuf, "\t");
+				token = strtok(NULL, "\t");
+				procuid_r = atoi(token);
+
+				// print if match
+				if (procuid_r == uid){
+					printf(procname);
+					printf(procuid);
+					printf("\n");
 				}
+			}
 		}
-
 	}
 	free(stat_buf);
 	return(EXIT_SUCCESS); 
