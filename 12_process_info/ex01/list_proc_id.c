@@ -113,15 +113,15 @@ int main(int argc, char *argv[]){
 
 		// read in the line, parse the uid
 		while (getline(&linebuf, &len, pid_fstream) != -1) {
-			// if (strstr(linebuf, "Name:") || strstr(linebuf, "Uid:")) {
-			// 	printf("%s\n", linebuf);
-			// }
+			if (strstr(linebuf, "Name:")) {
+				printf("%s\n", linebuf);
+			}
 			if (strstr(linebuf, "Uid:")) {
 				printf("%s\n", linebuf);
 				char * token = strtok(linebuf, " ");
 
-				while( token != NULL ) {
-					printf( " %s\n", token ); //printing each token
+				for (int i=0;i<2;i++) {
+					printf( " %s\n", token ); 
 					token = strtok(NULL, " ");
 				}
 		}
