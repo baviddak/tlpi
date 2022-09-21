@@ -40,7 +40,6 @@ int is_number(char *in_str) {
 	return(0);
 }
 
-
 int main(int argc, char *argv[]){
 	int uid;
 	DIR *dirp;
