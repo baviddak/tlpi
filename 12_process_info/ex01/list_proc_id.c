@@ -19,6 +19,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <dirent.h>
+#include <ctype.h>
 
 #include "tlpi_hdr.h"
 #include "ugid_functions.h"
@@ -27,68 +28,104 @@
 #define LINE_MAX 40
 #define FILEBUF_MAX 200
 
+
+struct uid_info {
+   char type[50];
+   char value[50];
+};
+
+int is_number(char *in_str) {
+
+    int length = strlen (in_str);
+
+    for (int i=0;i<length; i++) {
+        if (!isdigit(in_str[i])) {
+            // printf ("Entered input is not a number\n");
+            return(-1);
+        }
+	}
+
+    // printf ("Given input is a number\n");
+	return(0);
+}
+
+
 int main(int argc, char *argv[]){
 	int uid;
 	int procuid;
 	int status_fd;
 	DIR *dirp;
+	FILE *pid_fstream;
 	struct dirent *direntp;
-	struct stat *stat_buf = (struct stat*)(malloc(sizeof(struct stat)));
+	struct stat *stat_buf = (struct stat *)(malloc(sizeof(struct stat)));
 	const char *procdir="/proc";
 	char filepath_buf[FILEPATH_MAX];
-	char linebuf[FILEBUF_MAX];
+	char **pid_info;
+	char *linebuf;
 	char *token;
 	char *line_token;
+	size_t len = 0;
+
+	// validate command
+	if ( argc != 2 ) {
+        usageErr("%s <username>", argv[0]);
+    }
 	
+	// get the uid from username
 	uid = userIdFromName(argv[1]);
+	printf("The uid is %d", uid);
 	
+	// open the /proc dir
 	dirp = opendir(procdir);
 	errno = 0;
 	
 	while((direntp = readdir(dirp)) != NULL){
 		
+		// ignore this and parent folder
 		if(strcmp(direntp->d_name, ".") == 0 || strcmp(direntp->d_name, "..") == 0){
 			continue;
 		}
 
+		// check if the folder is a number
+		if(is_number(direntp->d_name) != 0){
+			continue;
+		}
+
+		// construct the full filename
 		strcpy(filepath_buf, "/proc/");
 		strcat(filepath_buf, direntp->d_name);
 		lstat(filepath_buf, stat_buf);
-		
-		
-		if(S_ISDIR(stat_buf->st_mode)){
 
-			strcat(filepath_buf, "/status");
-			status_fd = open(filepath_buf, O_RDONLY);
-
-			if(status_fd == -1){
-				printf("Couldn't open status file for %s\n", filepath_buf);
-				close(status_fd);
-				continue;
-			}
-			
-			if(read(status_fd, linebuf, FILEBUF_MAX) == -1){
-				errExit("read");
-			}
-			token = strtok(linebuf, "\n");
-			
-			while(token) {
-				if(strncmp(token, "Uid", 3) == 0){
-					
-					/* printf("token is %s\n", token); */
-					line_token = strtok(token, "\t");
-					line_token = strtok(NULL, "\t");
-					procuid = atoi(line_token);
-					if(procuid == uid){
-						printf("file is %s\n", filepath_buf);
-						printf("Match!!\n");
-					}
-					break;
-				}
-				token = strtok(NULL, "\n");
-			}
-			close(status_fd);
+		// check if it is a directory
+		if(S_ISDIR(stat_buf->st_mode) == 0){
+			continue;
 		}
+
+		// try to open the status file
+		strcat(filepath_buf, "/status");
+		// status_fd = open(filepath_buf, O_RDONLY);
+
+		pid_fstream = fopen(filepath_buf, "r");
+		if (pid_fstream == NULL) {
+			printf("Couldn't open status file for %s\n", filepath_buf);
+			continue;
+		}
+
+		// read in the line, parse the uid
+		while (getline(&linebuf, &len, pid_fstream) != -1) {
+			// if (strstr(linebuf, "Name:") || strstr(linebuf, "Uid:")) {
+			// 	printf("%s\n", linebuf);
+			// }
+			if (strstr(linebuf, "Uid:")) {
+				printf("%s\n", linebuf);
+				char * token = strtok(linebuf, " ");
+
+				while( token != NULL ) {
+					printf( " %s\n", token ); //printing each token
+					token = strtok(NULL, " ");
+				}
+		}
+
 	}
 	free(stat_buf);
 	return(EXIT_SUCCESS); 
