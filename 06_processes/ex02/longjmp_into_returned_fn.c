@@ -1,5 +1,5 @@
 /* Write a program to see what happens if we try to longjmp() into a function 
- * that has already returned 
+ * that has already returned.
  */
 
 /* Usage: ./longjmp_into_returned_fn.exe */
