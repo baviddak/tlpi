@@ -4,12 +4,7 @@
 
 /* Usage: ./list_proc_id.exe <username> */
 
-#include <fcntl.h>
-#include <sys/utsname.h>
-#include <sys/types.h>
 #include <sys/stat.h>
-#include <unistd.h>
-#include <string.h>
 #include <dirent.h>
 #include <ctype.h>
 
