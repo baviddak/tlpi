@@ -2,7 +2,7 @@
  * open.
  */
 
-/* Usage: ./file_path.exe <filepath>*/
+/* Usage: ./file_path.exe <fullfilepath>*/
 
 #include <sys/stat.h>
 #include <dirent.h>
@@ -30,13 +30,11 @@ int is_number(char *in_str) {
 int main(int argc, char *argv[]){
 	DIR *dirp;
 	struct dirent *direntp;
-	struct dirent **result;
 	struct stat *stat_buf = (struct stat *)(malloc(sizeof(struct stat)));
 	const char *procdir="/proc";
-	const char *fd_dir="/fd";
+	const char *fd_dir="/fd/";
 	char filepath_buf[FILEPATH_MAX];
 	char *filepath;
-	ssize_t len;
 
 	// check number of args and set filepath
 	if ( argc != 2 ) {
@@ -51,16 +49,7 @@ int main(int argc, char *argv[]){
 	}
 	errno = 0;
 
-	printf("check1\n");
-	
-	while(readdir_r(dirp, direntp, result) == 0) {
-
-		printf("check2\n");
-
-		// if end of dir is reached
-		if(result == NULL){
-			break;
-		}
+	while((direntp = readdir(dirp)) != NULL){
 		
 		// ignore this and parent folder
 		if(strcmp(direntp->d_name, ".") == 0 || strcmp(direntp->d_name, "..") == 0){
@@ -81,26 +70,34 @@ int main(int argc, char *argv[]){
 		if(S_ISDIR(stat_buf->st_mode) == 0){
 			continue;
 		}
-		strcat(filepath_buf, fd_dir);
-		struct dirent *direntp_fd = (struct stat *)(malloc(sizeof(struct dirent)));
-		struct dirent **result_fd;
-		DIR *dirp_fd;
 
-		printf("%s\n",filepath_buf);
+		// add the fd path
+		strcat(filepath_buf, fd_dir);
 
 		// traverse the /fd dir
+		struct dirent *direntp_fd = (struct dirent *)(malloc(sizeof(struct dirent)));
+		DIR *dirp_fd;
 		dirp_fd = opendir(filepath_buf);
 		
-		while(readdir_r(dirp_fd, direntp_fd, result_fd) == 0) { 
+		while((direntp_fd = readdir(dirp_fd)) != NULL){ 
 
-			// if end of dir is reached
-			if(result_fd == NULL){
-				break;
+			char filepath_buf_fd[FILEPATH_MAX];
+			char buffer[FILEPATH_MAX];
+			strcpy(filepath_buf_fd, filepath_buf);
+
+			// ignore this and parent folder
+			if(strcmp(direntp_fd->d_name, ".") == 0 || strcmp(direntp_fd->d_name, "..") == 0){
+				continue;
 			}
 
-			printf("The symlink filename is: %s\n", direntp_fd->d_name);
+			printf("The symlink full filename is: %s\n", strcat(filepath_buf_fd, direntp_fd->d_name));
+
+			ssize_t bytes_written = readlink(filepath_buf_fd, buffer, FILEPATH_MAX);
+
+			printf("The actual filename is: %s\n", buffer);
+
 		}
-		
+
 	}
 	free(stat_buf);
 	return(EXIT_SUCCESS); 
