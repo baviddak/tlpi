@@ -94,6 +94,7 @@ int main(int argc, char *argv[]){
 
 			ssize_t bytes_written = readlink(filepath_buf_fd, buffer, FILEPATH_MAX);
 
+			printf("The number of bytes written is: %ld\n", bytes_written);
 			printf("The actual filename is: %s\n", buffer);
 
 		}
