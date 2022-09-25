@@ -79,7 +79,6 @@ int main(int argc, char *argv[]){
 
 		// try to open the status file
 		strcat(filepath_buf, "/status");
-		// status_fd = open(filepath_buf, O_RDONLY);
 
 		pid_fstream = fopen(filepath_buf, "r");
 		if (pid_fstream == NULL) {
