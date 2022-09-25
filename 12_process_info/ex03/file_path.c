@@ -27,6 +27,18 @@ int is_number(char *in_str) {
 	return(0);
 }
 
+void print_str_len(char *in_str) {
+
+    int length = strlen (in_str);
+
+    for (int i=0;i<length; i++) {
+        if (!isdigit(in_str[i])) {
+            return(-1);
+        }
+	}
+	return(0);
+}
+
 int main(int argc, char *argv[]){
 	DIR *dirp;
 	struct dirent *direntp;
