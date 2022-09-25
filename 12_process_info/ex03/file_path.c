@@ -38,7 +38,7 @@ int main(int argc, char *argv[]){
 
 	// check number of args and set filepath
 	if ( argc != 2 ) {
-        usageErr("%s <filepath>", argv[0]);
+        usageErr("%s <filepath>\n", argv[0]);
     }
 	filepath = argv[1];
 	
