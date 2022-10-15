@@ -16,6 +16,7 @@ int access_eff (const char *pathname, int mode) {
 	uid_t p_euid = geteuid();
 	gid_t p_egid = getegid();
 
+	// allocate the stat buffer
 	struct stat *stat_buf = (struct stat *)malloc(sizeof(struct stat));
 
 	// call stat
@@ -27,25 +28,88 @@ int access_eff (const char *pathname, int mode) {
 	uid_t f_uid = stat_buf->st_uid;
 	gid_t f_gid = stat_buf->st_gid;
 
+	// get the st_mode
+	mode_t f_mode = stat_buf->st_mode;
+	int f_mode_mask = 0;
+
 	if (p_euid == 0) {
-		// process is privileged
-		printf("process is privileged\n");
+		// process is privileged - all access is granted
+		return  0;
 	} 
 	else if (p_euid == f_uid) {
 		// effective user ID of the process is the same as the user ID (owner) 
-		// of the file
-		printf("effective user ID of the process is the same as the user ID (owner) of the file\n");
+		// of the file - access is granted according to the owner permissions on 
+ 		// the file
+
+		// check f_mode against S_IRUSR, S_IWUSR, S_IXUSR
+		if (f_mode & S_IRUSR) {
+			f_mode_mask += R_OK;
+		}
+		if (f_mode & S_IWUSR) {
+			f_mode_mask += W_OK;
+		}
+		if (f_mode & S_IXUSR) {
+			f_mode_mask += X_OK;
+		}
+
+		// check file permission mask against mode
+		if (f_mode_mask == mode){
+			printf("Mask of file (%d) is the same as mode (%d)\n", f_mode_mask, mode);
+			return 0;
+		} else {
+			printf("Mask of file (%d) not equal to mode (%d)\n", f_mode_mask, mode);
+			return -1;
+		}
+
 	}
 	else if (p_egid == f_gid) {
 		// effective group ID of the process matches the group ID (group owner) 
-		// of the file
-		printf("effective group ID of the process matches the group ID (group owner) of the file\n");
+		// of the file - access is granted according to the group permissions on 
+		// the file
+		
+		// check f_mode against S_IRGRP, S_IWGRP, S_IXGRP
+		if (f_mode & S_IRGRP) {
+			f_mode_mask += R_OK;
+		}
+		if (f_mode & S_IWGRP) {
+			f_mode_mask += W_OK;
+		}
+		if (f_mode & S_IXGRP) {
+			f_mode_mask += X_OK;
+		}
+
+		// check file permission mask against mode
+		if (f_mode_mask == mode){
+			printf("Mask of file (%d) is the same as mode (%d)\n", f_mode_mask, mode);
+			return 0;
+		} else {
+			printf("Mask of file (%d) not equal to mode (%d)\n", f_mode_mask, mode);
+			return -1;
+		}
 
 	} else {
-		printf("use other\n");
+		// access is granted according to the other permissions on the file
 
+		// check f_mode against S_IROTH, S_IWOTH, S_IXOTH
+		if (f_mode & S_IROTH) {
+			f_mode_mask += R_OK;
+		}
+		if (f_mode & S_IWOTH) {
+			f_mode_mask += W_OK;
+		}
+		if (f_mode & S_IXOTH) {
+			f_mode_mask += X_OK;
+		}
+
+		// check file permission mask against mode
+		if (f_mode_mask == mode){
+			printf("Mask of file (%d) is the same as mode (%d)\n", f_mode_mask, mode);
+			return 0;
+		} else {
+			printf("Mask of file (%d) not equal to mode (%d)\n", f_mode_mask, mode);
+			return -1;
+		}
 	}
-	return 0;
 }
 
 int main (int argc, char *argv[]) {
@@ -55,11 +119,13 @@ int main (int argc, char *argv[]) {
         usageErr("%s [-frwx] <pathname>", argv[0]);
     }
 
-	char *pathname = argv[1];
+	// set variables
+	char *pathname = argv[2];
 	printf("pathname: %s\n", pathname);
 	int mode = 0;
 	int opt;
 
+	// get options
 	while ((opt = getopt(argc, argv, "frwx")) != -1) {
 		switch (opt) {
 			case 'f':
@@ -79,41 +145,9 @@ int main (int argc, char *argv[]) {
 		}
 	}
 
+	// test our function
+	int ans = access_eff(pathname, mode);
+	printf("Return: %d\n", ans);
+
 	return (EXIT_SUCCESS);
 }
-
-/* Notes:
- * ------
- * 1. If the process is privileged, all access is granted.
- * 2. If the effective user ID of the process is the same as the user ID (owner) 
- * of the file, then the access is granted according to the owner permissions on 
- * the file. For example, read access is granted if the owner-read permission 
- * bit is turned on in the file permissions mask; otherwirse, read access is 
- * denied.
- * 3. If the effective group ID of the process or any of the process supp. group 
- * IDs matches the group ID (group owner) of the file, then the access is 
- * granted according to the group permissions on the file.
- * 4. Otherwise, the access is granted according to the other permissions on the 
- * file.
- * 
- * The checks against owner, group, and the other permissions are done in order, 
- * and checking stops as soon as the applicable rule is found.
- * 
- * access():
- * ---------
- * The access() system call checks the accessibility of the file specified in 
- * pathname based on a process's real user and group IDs (and supplementary 
- * group IDs). 
- * It returns 0 if all permissions in mode are granted, otherwise returns -1.
- * 
- * Algorithm:
- * ----------
- * 1. Find the effective and group ID of the current process. (use geteuid, 
- * getegid)
- * 2. Get the user ID (owner) and group ID (group owner) of the file, and 
- * compare (from the i-node )
- * 2. Get the i-node of the file specified in pathname and inspect the st_mode
- * thing
- * 3. Follow the rules laid out in the notes (once a rule is fullfilled, 
- * checking stops)
- */
