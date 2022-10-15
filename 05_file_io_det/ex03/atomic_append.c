@@ -31,6 +31,7 @@ int main(int argc, char *argv[]){
 		if(opt == 'x'){
 			seek = true;
 			open_flags = O_CREAT | O_RDWR;
+			break;
 		}
 	}
 	
