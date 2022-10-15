@@ -76,6 +76,6 @@ int main(int argc, char * argv[]){
 	if (close(outputfd) == -1) {
 		errExit("close");
 	}
-  
-  return(EXIT_SUCCESS);
+	
+	return(EXIT_SUCCESS);
 }
