@@ -9,7 +9,7 @@
 #include <fcntl.h>
 #include <getopt.h>
 
-#include <tlpi_hdr.h>
+#include "tlpi_hdr.h"
 
 #ifndef BUFFER_MAX
 #define BUFFER_MAX 1000
