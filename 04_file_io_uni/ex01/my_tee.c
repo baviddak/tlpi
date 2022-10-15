@@ -67,15 +67,15 @@ int main(int argc, char * argv[]){
             fatal("couldn't write buffer to standard out");
         }
     }
-
-  if(num_read == -1){
-      errExit("read");
-  }
-
-  /* close the output file descriptor */
-  if(close(outputfd) == -1){
-      errExit("close");
-  }
+	
+	if (num_read == -1) {
+		errExit("read");
+	}
+	
+	/* close the output file descriptor */
+	if (close(outputfd) == -1) {
+		errExit("close");
+	}
   
   return(EXIT_SUCCESS);
 }
