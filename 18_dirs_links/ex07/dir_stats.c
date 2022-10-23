@@ -109,7 +109,7 @@ int main (int argc, char *argv[]) {
 	// struct FTW ftwbuf;
 
 	// call the nftw function
-	if (nftw(dirpath, dir_stats, typeflags, 0) == -1) {
+	if (nftw(dirpath, dir_stats, 3, typeflags) == -1) {
 		exit(EXIT_FAILURE);
 	}
 
