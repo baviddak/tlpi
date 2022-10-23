@@ -105,8 +105,8 @@ int main (int argc, char *argv[]) {
 	dir_stat.sock_count = 0;
 	dir_stat.lnk_count = 0;
 
-	int typeflags = 0; 
-	struct FTW ftwbuf;
+	int typeflags = FTW_PHYS; 
+	// struct FTW ftwbuf;
 
 	// call the nftw function
 	if (nftw(dirpath, dir_stats, typeflags, 0) == -1) {
