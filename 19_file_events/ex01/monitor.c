@@ -22,29 +22,25 @@
 /* Global variables */
 int inotify_fd;
 FILE *log_fstream;
+char oldname[35];
 
 void event_handle(struct inotify_event *s) {
 	// Allocate a local buffer for formatted strings
-	char buf[100];
-	char name[50];
+	char buf[160];
 	int wd;
-	strcpy(name, s->name);
-
-	// sprintf(buf, "Event occured on wd: %d\n", s->wd);
-	// fputs(buf, log_fstream);
-	// fflush(log_fstream);
+	char dirname[100] = "test_dir/";
+	strcat(dirname, s->name);
 
 	if (s->mask & IN_CREATE) {
 		if(s->mask & IN_ISDIR) {
-			sprintf(buf, "Created directory %s\n", name);
+			sprintf(buf, "Created directory: %s\n", dirname);
 			fputs(buf, log_fstream);
 			fflush(log_fstream);
-			// need to somehow get the current working dir name and pre-pend it to the s->path
-			if ((wd = inotify_add_watch(inotify_fd, name, IN_ALL_EVENTS)) == -1) {
+			if ((wd = inotify_add_watch(inotify_fd, dirname, IN_ALL_EVENTS)) == -1) {
 				err_exit("inotify_add_watch");
 			}
 		} else {
-			sprintf(buf, "Created file%s\n", s->name);
+			sprintf(buf, "Created file: %s\n", s->name);
 			fputs(buf, log_fstream);
 			fflush(log_fstream);
 		}
@@ -52,7 +48,7 @@ void event_handle(struct inotify_event *s) {
 
 	if (s->mask & IN_DELETE) {
 		if (s->mask & IN_ISDIR) {
-			sprintf(buf, "Removed directory%s\n", s->name);
+			sprintf(buf, "Removed directory: %s\n", s->name);
 			fputs(buf, log_fstream);
 			fflush(log_fstream);
 			wd = inotify_rm_watch(inotify_fd, s->wd);
@@ -60,22 +56,24 @@ void event_handle(struct inotify_event *s) {
 				err_exit("inotify_rm_watch");
 			}
 		} else {
-			sprintf(buf, "Removed file%s\n", s->name);
+			sprintf(buf, "Removed file %s\n", s->name);
 			fputs(buf, log_fstream);
 			fflush(log_fstream);
 		}
 	}
 
 	if (s->mask & IN_MOVED_FROM) {
-		sprintf(buf, "Moved from %s\n", s->name);
-		fputs(buf, log_fstream);
-		fflush(log_fstream);
+		if (s->cookie > 0) {
+			strcpy(oldname, s->name);
+		}
 	}
 
 	if (s->mask & IN_MOVED_TO) {
-		sprintf(buf, "Moved to %s\n", s->name);
-		fputs(buf, log_fstream);
-		fflush(log_fstream);
+		if (s->cookie > 0) {
+			sprintf(buf, "File %s renamed to %s!\n",oldname, s->name);
+			fputs(buf, log_fstream);
+			fflush(log_fstream);
+		}
 	}
 }
 
@@ -92,12 +90,6 @@ sub_dir_add_watch(const char *pathname, const struct stat *sbuf, int type, struc
 	
 	return 0;
 }
-
-// if you want to use the bare bones open(), write(), read()
-// instead of the FILE * stream libs, you'll have to figure out 
-// how to disable buffering. Even with the FILE streams you have 
-// to constantly flush to disk since we may potentially never reach
-// the close() call
 
 int main (int argc, char *argv[]) {
 
