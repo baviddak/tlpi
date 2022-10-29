@@ -7,7 +7,6 @@
 #define _XOPEN_SOURCE 600
 #include <ftw.h>
 #include <fcntl.h>
-#include <time.h>
 #include <sys/inotify.h>
 #include <sys/stat.h>
 
@@ -22,15 +21,23 @@
 /* Global variables */
 int inotify_fd;
 FILE *log_fstream;
-char oldname[35];
+char oldname[50];
 
-void event_handle(struct inotify_event *s) {
-	// Allocate a local buffer for formatted strings
-	char buf[160];
+void event_handle(struct inotify_event *s, char *topdir) {
+
+	// local buffer for formatted stringss
+	char buf[170];
+
+	// local watch descriptor
 	int wd;
-	char dirname[100] = "test_dir/";
+
+	// allocate a buffer for filename
+	char dirname[100];
+	strcpy(dirname, topdir);
+	strcat(dirname, "/");
 	strcat(dirname, s->name);
 
+	// file was created
 	if (s->mask & IN_CREATE) {
 		if(s->mask & IN_ISDIR) {
 			sprintf(buf, "Created directory: %s\n", dirname);
@@ -40,15 +47,16 @@ void event_handle(struct inotify_event *s) {
 				err_exit("inotify_add_watch");
 			}
 		} else {
-			sprintf(buf, "Created file: %s\n", s->name);
+			sprintf(buf, "Created file: %s\n", dirname);
 			fputs(buf, log_fstream);
 			fflush(log_fstream);
 		}
 	}
 
+	// file was deleted
 	if (s->mask & IN_DELETE) {
 		if (s->mask & IN_ISDIR) {
-			sprintf(buf, "Removed directory: %s\n", s->name);
+			sprintf(buf, "Removed directory: %s\n", dirname);
 			fputs(buf, log_fstream);
 			fflush(log_fstream);
 			wd = inotify_rm_watch(inotify_fd, s->wd);
@@ -56,21 +64,23 @@ void event_handle(struct inotify_event *s) {
 				err_exit("inotify_rm_watch");
 			}
 		} else {
-			sprintf(buf, "Removed file %s\n", s->name);
+			sprintf(buf, "Removed file %s\n", dirname);
 			fputs(buf, log_fstream);
 			fflush(log_fstream);
 		}
 	}
 
+	// moved from event
 	if (s->mask & IN_MOVED_FROM) {
 		if (s->cookie > 0) {
-			strcpy(oldname, s->name);
+			strcpy(oldname, dirname);
 		}
 	}
 
+	// moved to event
 	if (s->mask & IN_MOVED_TO) {
 		if (s->cookie > 0) {
-			sprintf(buf, "File %s renamed to %s!\n",oldname, s->name);
+			sprintf(buf, "File %s renamed to %s!\n",oldname, dirname);
 			fputs(buf, log_fstream);
 			fflush(log_fstream);
 		}
@@ -103,6 +113,7 @@ int main (int argc, char *argv[]) {
 	ssize_t num_read;
 	char *p;
 	struct inotify_event *event;
+	char *topdir = argv[1];
 
 	// Open the file id for the log
 	log_fstream = fopen("monitor.log", "a+");
@@ -114,12 +125,12 @@ int main (int argc, char *argv[]) {
 	inotify_fd = inotify_init();
 	
 	// Add the dir in cmd line to the watch
-	if ((wd = inotify_add_watch(inotify_fd, argv[1], IN_ALL_EVENTS)) == -1) {
+	if ((wd = inotify_add_watch(inotify_fd, topdir, IN_ALL_EVENTS)) == -1) {
 		err_exit("inotify_add_watch");
 	}
 
 	// Add all subdirectories to the watch
-	if (nftw(argv[1], sub_dir_add_watch, 1, 0) == -1) {
+	if (nftw(topdir, sub_dir_add_watch, 1, 0) == -1) {
 		exit(EXIT_FAILURE);
 	}
 
@@ -138,7 +149,7 @@ int main (int argc, char *argv[]) {
 
 		for (p = buf; p < buf + num_read; ) {
 			event = (struct inotify_event *)p;
-			event_handle(event);
+			event_handle(event, topdir);
 
 			p += sizeof(struct inotify_event) + event->len;
 		}
