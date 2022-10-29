@@ -50,6 +50,7 @@ int main(int argc, char *argv[]){
 	if (dirp == NULL) {
 		errExit("opendir");
 	}
+
 	errno = 0;
 
 	while((direntp = readdir(dirp)) != NULL){
@@ -105,8 +106,8 @@ int main(int argc, char *argv[]){
 				continue;
 			}
 
-			// null out the rest of the string
-			memset(buffer + bytes_written, '\0', FILEPATH_MAX - bytes_written);
+			// null out the end of string
+			buffer[bytes_written] = '\0';
 
 			printf("Actual: %s\n", buffer);
 			printf("Expected: %s\n\n", filepath);
