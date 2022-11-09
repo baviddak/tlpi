@@ -26,7 +26,7 @@ char oldname[50];
 void event_handle(struct inotify_event *s, char *topdir) {
 
 	// local buffer for formatted stringss
-	char buf[170];
+	char buf[240];
 
 	// local watch descriptor
 	int wd;
