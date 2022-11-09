@@ -16,12 +16,12 @@
 
 int is_number(char *in_str) {
 
-    int length = strlen (in_str);
+	int length = strlen (in_str);
 
-    for (int i=0;i<length; i++) {
-        if (!isdigit(in_str[i])) {
-            return(-1);
-        }
+	for (int i=0;i<length; i++) {
+		if (!isdigit(in_str[i])) {
+			return(-1);
+		}
 	}
 
 	return(0);
@@ -41,8 +41,8 @@ int main(int argc, char *argv[]){
 
 	// validate command
 	if ( argc != 2 ) {
-        usageErr("%s <username>", argv[0]);
-    }
+		usageErr("%s <username>", argv[0]);
+	}
 	
 	// get the uid from username
 	uid = userIdFromName(argv[1]);

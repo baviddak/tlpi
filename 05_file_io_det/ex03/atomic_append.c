@@ -57,18 +57,18 @@ int main(int argc, char *argv[]){
 	}
 	
 	num_written = write(fd, buf, buf_size);
-    printf("Number of bytes written is %d\n", num_written);
-    
+	printf("Number of bytes written is %d\n", num_written);
+	
 	if(num_written == -1){
 		errExit("write");
 	}
-    
-    if(close(fd) == -1){
+	
+	if(close(fd) == -1){
 		errExit("close");
 	}
-    
-    free(buf);
-    return(EXIT_SUCCESS);
+	
+	free(buf);
+	return(EXIT_SUCCESS);
 }
 
 

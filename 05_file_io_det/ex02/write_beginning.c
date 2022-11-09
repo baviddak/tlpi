@@ -24,38 +24,38 @@
 
 int main(int argc, char * argv[]){
   
-    int fd;
-    char buf[BUFFER_MAX];
-    int num_written;
+	int fd;
+	char buf[BUFFER_MAX];
+	int num_written;
 
-    if (argc != 2){
-        usageErr ("%s file_name\n", argv[0]);
-    }
+	if (argc != 2){
+		usageErr ("%s file_name\n", argv[0]);
+	}
 
-    printf("Enter a string:\n");
-    scanf("%100s", &buf);
-    puts(buf);
+	printf("Enter a string:\n");
+	scanf("%100s", &buf);
+	puts(buf);
 
-    fd = open(argv[1], O_WRONLY | O_APPEND);
+	fd = open(argv[1], O_WRONLY | O_APPEND);
 
-    if (fd == -1) {
-        errExit("open");
-    }
+	if (fd == -1) {
+		errExit("open");
+	}
 
-    if (lseek(fd, 0, SEEK_SET) == -1){
-        errExit("lseek");
-    }
+	if (lseek(fd, 0, SEEK_SET) == -1){
+		errExit("lseek");
+	}
 
-    num_written = write(fd, buf, strlen(buf));
+	num_written = write(fd, buf, strlen(buf));
 
-    if(close(fd) == -1){
-        errExit("close");
-    }
+	if(close(fd) == -1){
+		errExit("close");
+	}
 
-    /* The O_APPEND flag will guaruntee that the 'seek' and the 'write' 
-     * functions will occur atomically 
-     */
+	/* The O_APPEND flag will guaruntee that the 'seek' and the 'write' 
+	 * functions will occur atomically 
+	 */
 
-    return(EXIT_SUCCESS);
+	return(EXIT_SUCCESS);
 }
 

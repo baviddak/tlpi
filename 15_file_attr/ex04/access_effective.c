@@ -116,8 +116,8 @@ int main (int argc, char *argv[]) {
 
 	// validate command
 	if ( argc != 3 ) {
-        usageErr("%s [-frwx] <pathname>", argv[0]);
-    }
+		usageErr("%s [-frwx] <pathname>", argv[0]);
+	}
 
 	// set variables
 	char *pathname = argv[2];

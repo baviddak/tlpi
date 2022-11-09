@@ -17,12 +17,12 @@
 
 int is_number(char *in_str) {
 
-    int length = strlen (in_str);
+	int length = strlen (in_str);
 
-    for (int i=0;i<length; i++) {
-        if (!isdigit(in_str[i])) {
-            return(-1);
-        }
+	for (int i=0;i<length; i++) {
+		if (!isdigit(in_str[i])) {
+			return(-1);
+		}
 	}
 	return(0);
 }

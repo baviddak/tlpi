@@ -13,8 +13,8 @@ int main (int argc, char *argv[]) {
 
 	// validate command
 	if ( argc != 2 ) {
-        usageErr("%s <pathname>", argv[0]);
-    }
+		usageErr("%s <pathname>", argv[0]);
+	}
 
 	// get the file path
 	char *pathname = argv[1];
