@@ -2,12 +2,10 @@
  * changed to be SIG_IGN, the program never sees (catches) the signal.
  */
 
-/* How to test:
- * 1. Start this program using "./pending.exe &"
- * 2. Observe that SIGUSR1 is not in the pending list.
- * 3. Send the SIGUSR1 signal to our process using "kill -s SIGUSR1 NNNN"
- * 4. Observe that the SIGUSR1 signal is still not in the pending list, and the 
- * handler actions have not occured.
+/* Usage: 
+ * ./pending.exe &
+ * kill -s SIGUSR1 NNNN
+ * Observe the program never handled SIGUSR1
  */
 
 #define _GNU_SOURCE
@@ -25,12 +23,10 @@ static void handler(int sig) {
 
 int main() {
 	// Create a signal set with SIGUSR1
-	sigset_t block_set, pending_mask;
-	// sigemptyset(block_set);
-
+	sigset_t block_set, pending_set;
 	sigaddset(&block_set, SIGUSR1);
 
-	// Set the disposition of SIGUSR1 to SIG_IGN
+	// Set the disposition of SIGUSR1 to the handler
 	struct sigaction sigusr1_action;
 	sigusr1_action.sa_handler = handler;
 	if(sigaction(SIGUSR1, &sigusr1_action, NULL) != 0){
@@ -43,24 +39,32 @@ int main() {
 	}
 
 	// Print the list of pending signals (should not contain SIGUSR1)
-	if (sigpending(&pending_mask) != 0){
+	if (sigpending(&pending_set) != 0){
 		err_exit("sigpending");
 	}
 	printf("The following signals are pending: ");
-	printSigset(stdout, "\t\t", &pending_mask);
+	printSigset(stdout, "\t\t", &pending_set);
 
-	// Wait some time for for the SIGUSR1 signal to be sent
-	sleep(30);
+	// Constantly check pending signals list for SIGUSR1
+	while(true){
+		if(sigpending(&pending_set) == -1){
+			err_exit("sigpending");
+		}
+		if (sigisemptyset(&pending_set)){
+			continue;
+		} else {
+			if(sigismember(&pending_set, SIGUSR1)) {
+				break;
+			}
+		}
+	}
 
 	// Set the disposition of SIGUSR1 to SIG_IGN. Comment this out and verify 
-	// that the number is 1
+	// that the number is 1, or leave it in and verify the number is 0
 	sigusr1_action.sa_handler = SIG_IGN;
 	if(sigaction(SIGUSR1, &sigusr1_action, NULL) != 0){
 		err_exit("sigaction");
 	}
-
-	// Wait some time
-	sleep(2);
 
 	// Unblock the signal
 	if (sigprocmask(SIG_UNBLOCK, &block_set, NULL) != 0){
@@ -68,11 +72,11 @@ int main() {
 	}
 
 	// Print the list of pending signals (should not contain SIGUSR1)
-	if (sigpending(&pending_mask) != 0){
+	if (sigpending(&pending_set) != 0){
 		err_exit("sigpending");
 	}
 	printf("The following signals are pending: ");
-	printSigset(stdout, "\t\t", &pending_mask);
+	printSigset(stdout, "\t\t", &pending_set);
 
 	// Print the number of times the SIGUSR1 signal was caught (should be 0)
 	printf("The number of times the SIGUSR1 was received is: %d\n", sig_usr1_cnt);
