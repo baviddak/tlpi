@@ -1,6 +1,6 @@
 # Set variables
 CC=gcc
-LDIR=../../libs
+LDIR=../../../libs
 CFLAGS=-Wall -I. -I$(LDIR)
 
 # Archive
