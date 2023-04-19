@@ -57,14 +57,14 @@ int main() {
 	// Set the disposition of SIGUSR1 to the handler
 	struct sigaction sigusr1_action;
 	sigusr1_action.sa_handler = handler;
-	sigusr1_action.sa_flags = SA_RESTART;
+	// sigusr1_action.sa_flags = SA_RESTART;
 	if(sigaction(SIGUSR1, &sigusr1_action, NULL) != 0){
 		err_exit("sigaction");
 	}
 
 	// Use my_siginterrupt to add or remove the SA_RESTART flag by setting 
 	// interrupt_flags to 0 or 1
-	int interrupt_flags = 1; 
+	int interrupt_flags = 0; 
 	if (my_siginterrupt(SIGUSR1, interrupt_flags) == -1) {
 		err_exit("my_siginterrupt");
 	}
