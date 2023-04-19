@@ -3,7 +3,7 @@
  */
 
 /* Usage:
- * ./my_siginterrupt
+ * ./my_siginterrupt.exe
  * In another terminal, send SIGUSR1 to the process (kill -s SIGUSR1 NNNN).
  * Observe that the read call is not interrupted, write some to the 
  * terminal and hit enter.
