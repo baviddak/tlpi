@@ -39,12 +39,13 @@ int main(int argc, char * argv[]) {
 		errExit("atoi");
 	}
 
+	// Test our function
 	my_alarm(seconds);
 
+	// Loop until the signal is recieved
 	int prev_clock = clock();
-
 	while(1){
-		if ((clock() - prev_clock) / CLOCKS_PER_SEC > 1){
+		if (clock() - prev_clock  > CLOCKS_PER_SEC){
 			printf("\nStill running...");
 			prev_clock = clock();
 		}
