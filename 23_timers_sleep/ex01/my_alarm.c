@@ -3,7 +3,8 @@
  */
 
 /* Usage:
- * ./my_alarm.exe N (N is the number of seconds to wait in for the alarm, 20 max)
+ * ./my_alarm.exe N (N is the number of seconds to wait in for the alarm, 20 
+ * max) 
  * Observe that the program exists after N seconds.
  */
 
