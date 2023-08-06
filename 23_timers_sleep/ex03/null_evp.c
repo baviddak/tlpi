@@ -15,7 +15,7 @@
 
 int main (int argc, char * argv[]) {
 
-    // Validate the command line args
+	// Validate the command line args
 	if(argc != 2 || strcmp(argv[1], "--help") == 0){
 		usageErr("%s \narg count is %d\n", argv[0], argc);
 	}
@@ -25,25 +25,25 @@ int main (int argc, char * argv[]) {
 		errExit("atoi");
 	}
 
-    timer_t my_timer;
-    int timer_flags = 0;
+	timer_t my_timer;
+	int timer_flags = 0;
 
-    struct itimerspec my_timeval;
-    my_timeval.it_interval.tv_nsec = 0;
-    my_timeval.it_interval.tv_sec = 0;
-    my_timeval.it_value.tv_sec = seconds;
+	struct itimerspec my_timeval;
+	my_timeval.it_interval.tv_nsec = 0;
+	my_timeval.it_interval.tv_sec = 0;
+	my_timeval.it_value.tv_sec = seconds;
 
-    // Setup a timer with the timer_create() call, with NULL as the evp arg
-    if (timer_create(CLOCK_REALTIME, NULL, &my_timer) == -1) {
-        errExit("timer_create");
-    }
+	// Setup a timer with the timer_create() call, with NULL as the evp arg
+	if (timer_create(CLOCK_REALTIME, NULL, &my_timer) == -1) {
+		errExit("timer_create");
+	}
 
-    // Arm the timer
-    if (timer_settime(my_timer, timer_flags, &my_timeval, NULL) == -1) {
-        errExit("timer_settime");
-    }
+	// Arm the timer
+	if (timer_settime(my_timer, timer_flags, &my_timeval, NULL) == -1) {
+		errExit("timer_settime");
+	}
 
-    // Loop until the SIGALRM signal is recieved
+	// Loop until the SIGALRM signal is recieved
 	int prev_clock = clock();
 	while(1){
 		if (clock() - prev_clock  > CLOCKS_PER_SEC){
@@ -52,5 +52,5 @@ int main (int argc, char * argv[]) {
 		}
 	}
 
-    return 0;
+	return 0;
 }
