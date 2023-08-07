@@ -24,10 +24,11 @@ int main() {
 			errExit("vfork");
 		case 0:
 			// The child process - close the fd 0
+			printf("Child process started! My PID is %d\n", getpid());
 			_exit(close(0));
 		default:
 			// The parent - check that fd 0 is still open 
-			sleep(5);
+			printf("Parent process resumed! My PID is %d\n", getpid());
 			printf("Please enter a few characters: \n");
 			if (read(0, buf, BUF_SIZE*sizeof(char)) == -1) {
 				printf("There was an issue reading!");
