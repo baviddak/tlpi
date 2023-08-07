@@ -13,29 +13,29 @@
 
 int main() {
 
-    printf("The stdout fd is: %d\n", STDOUT_FILENO);
-    printf("The stdin fd is: %d\n", STDIN_FILENO);
-    printf("The stderr fd is: %d\n", STDERR_FILENO);
+	printf("The stdout fd is: %d\n", STDOUT_FILENO);
+	printf("The stdin fd is: %d\n", STDIN_FILENO);
+	printf("The stderr fd is: %d\n", STDERR_FILENO);
 
-    char buf[BUF_SIZE];
+	char buf[BUF_SIZE];
 
-    switch(vfork()) {
-        case -1:
-            errExit("vfork");
-        case 0:
-            // The child process - close the fd 0
-            _exit(close(0));
-        default:
-            // The parent - check that fd 0 is still open 
-            sleep(5);
-            printf("Please enter a few characters: \n");
-            if (read(0, buf, BUF_SIZE*sizeof(char)) == -1) {
-                printf("There was an issue reading!");
-            } else {
-                printf("The fd 0 is still open.\n");
-                printf("Buffer is %s\n", buf);
-            }
-    }
+	switch(vfork()) {
+		case -1:
+			errExit("vfork");
+		case 0:
+			// The child process - close the fd 0
+			_exit(close(0));
+		default:
+			// The parent - check that fd 0 is still open 
+			sleep(5);
+			printf("Please enter a few characters: \n");
+			if (read(0, buf, BUF_SIZE*sizeof(char)) == -1) {
+				printf("There was an issue reading!");
+			} else {
+				printf("The fd 0 is still open.\n");
+				printf("Buffer is %s\n", buf);
+			}
+	}
 
-    return(EXIT_SUCCESS);
+	return(EXIT_SUCCESS);
 }
