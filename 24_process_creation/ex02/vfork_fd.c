@@ -3,7 +3,7 @@
  * corresponding file descriptor in the parent.
  */
 
-/* Usage: ./vfork*/
+/* Usage: ./vfork.exe */
 
 #include <unistd.h>
 #include <stdlib.h>
