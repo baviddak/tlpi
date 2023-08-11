@@ -1,11 +1,23 @@
+/* Build with "gcc test.c -o test.exe" */
+
 #include <stdlib.h>
 #include <stdio.h>
 
+extern char **environ;
+
 int main(int argc, char *argv[]){
 
-    for (int i = 0; i < argc; i++){
-        printf("Arg: %s\n", argv[i]);
-    }
+	printf("This is the child process!\n");
 
-    return 0;
+	printf("The args are:\n");
+	for (int i = 0; i < argc; i++){
+		printf("%d: %s\n", i, argv[i]);
+	}
+
+	char ** ep;
+	printf("The env is:\n");
+	for (ep = environ; *ep != NULL; ep++){
+        printf("%s\n", *ep);
+    }
+	return 0;
 }

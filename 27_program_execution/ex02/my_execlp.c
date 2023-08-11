@@ -10,11 +10,10 @@
 #include <string.h>
 #include <stdarg.h>
 #include <stdbool.h>
+#include <sys/stat.h>
 #include "tlpi_hdr.h"
 
 extern char **environ;
-
-/* int execve(const char *pathname, char *const argv[], char *const envp[]); */
 
 int my_execlp(const char *filename, const char *arg, ... /* , (char *)NULL*/) {
 
@@ -36,9 +35,6 @@ int my_execlp(const char *filename, const char *arg, ... /* , (char *)NULL*/) {
 		use_path = true;
 		file = path;
 	}
-	printf("The file is: %s\n", file);
-	printf("Use file is %d\n", use_path);
-
 
 	/* --------------------------------- */
 	/* Step 1: Build the argument vector */
@@ -58,7 +54,6 @@ int my_execlp(const char *filename, const char *arg, ... /* , (char *)NULL*/) {
 			arg_size++;
 		}
 	}
-	printf("arg size is %d\n", arg_size);
 
 	va_end(vl1);
 
@@ -102,63 +97,56 @@ int my_execlp(const char *filename, const char *arg, ... /* , (char *)NULL*/) {
 	/* ---------------------------------------------------- */
 	/* Step 3: Figure out the pathname and exec the process */
 	/* ---------------------------------------------------- */
-
 	if (use_path) {
 		char *path_var = getenv("PATH");
-		printf("The path is %s\n", path_var);
 		const char s[2] = ":";
 		char *token;
 
-		/* get the first token */
+		/* Some variables needed for checking if executable. */
+		struct stat stat_buf;
+
 		token = strtok(path_var, s);
 		while( token != NULL ) {
-			printf( "The token is %s\n", token );
 			token = strtok(NULL, s);
+
+			/* Construct the path to the executable. */
 			char *exec_file = malloc(strlen(token) + 1 + strlen(file));
 			strcat(exec_file, token);
 			strcat(exec_file, "/");
 			strcat(exec_file, file);
-			printf("The file to execute is: %s\n", exec_file);
-			if (execve(exec_file, execve_argv, execve_envp) == -1) {
-				printf("Had a failure, continuing\n");
+
+			if (stat(exec_file, &stat_buf) == -1) {
+				errExit("stat");
+			}
+			if (stat_buf.st_mode & S_IXUSR) {
+				return execve(exec_file, execve_argv, execve_envp);
 			}
 		}
 	} else {
-		execve(file, execve_argv, execve_envp);
+		return execve(file, execve_argv, execve_envp);
 	}
 
-	return 0;
+	return -1;
 }
 
 int main() {
 
-	my_execlp("Tester", "asdf", "   fdsa","sde", (char *)NULL);
-	my_execlp("/bin/Tester", "asdf", (char *)NULL);
-	my_execlp("Tester", (char *)NULL);
-
-	my_execlp("Tester", "asdf", "   fdsa","sde","   fdsa","sde", "   ert","rewq", (char *)NULL);
 	int status;
 
 	switch(fork()){
 		case -1:
 			errExit("fork");
 		case 0:
+			/* Un-comment only one of these to test my_execlp(). */
+			status = my_execlp("./test.exe", "my arg", "another", (char *)NULL );
+			// status = my_execlp("./test.exe", (char *)NULL );
+			// status = my_execlp("python3", "--version", (char *)NULL );
+			// status = my_execlp("gcc", "--help", (char *)NULL );
+		default:
 			// parent
 			wait(&status);
-
-		default:
-			my_execlp("./test.exe", "my arg", "another", (char *)NULL );
+			printf("The exit status is: %d\n", status);
 	}
 
 	return(EXIT_SUCCESS);
 }
-
-
-// Notes
-
-/* execlp() takes its environment from the parent
- * The specification of the executable would be PATH + filename
- * 
- * If the filename contains any slashes, you need to get the basename
- * Otherwise check that it exists in path
- */
