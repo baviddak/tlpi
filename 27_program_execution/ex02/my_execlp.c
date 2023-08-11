@@ -120,7 +120,6 @@ int my_execlp(const char *filename, const char *arg, ... /* , (char *)NULL*/) {
 }
 
 int main() {
-
 	int status;
 
 	switch(fork()){
