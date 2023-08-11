@@ -17,14 +17,11 @@
 extern char **environ;
 
 int my_execlp(const char *filename, const char *arg, ... /* , (char *)NULL*/) {
-
-	/* -------------------------------- */
-	/* Step 0: Find the executable name */
-	/* -------------------------------- */
-
-	/* Track if we should use the PATH + filename or just filename */
-	bool use_path = false;
-
+	
+	/* Find the executable name */
+	bool use_path = false;	/* Track if we should use the PATH + filename or 
+	                         * just filename 
+							 */
 	char *path = (char *)malloc(strlen(filename) * sizeof(char));
 	strcpy(path, filename);
 
@@ -36,9 +33,7 @@ int my_execlp(const char *filename, const char *arg, ... /* , (char *)NULL*/) {
 		file = path;
 	}
 
-	/* --------------------------------- */
-	/* Step 1: Build the argument vector */
-	/* --------------------------------- */
+	/* Build the argument vector */
 	va_list vl1;
 	va_list vl2;
 
@@ -75,9 +70,7 @@ int my_execlp(const char *filename, const char *arg, ... /* , (char *)NULL*/) {
 	/* Argument vector must be NULL terminated */
 	execve_argv[arg_size + 1] = NULL;
 
-	/* ---------------------------------------------------------- */
-	/* Step 2: Build the environment vector from the parent's env */
-	/* ---------------------------------------------------------- */
+	/* Build the environment vector from the parent's env */
 	char **ep;
 	char **execve_envp;
 	int ep_size = 0;
@@ -94,9 +87,7 @@ int my_execlp(const char *filename, const char *arg, ... /* , (char *)NULL*/) {
 	}
 	execve_envp[ep_size] = NULL;
 
-	/* ---------------------------------------------------- */
-	/* Step 3: Figure out the pathname and exec the process */
-	/* ---------------------------------------------------- */
+	/* Figure out the pathname and exec the process */
 	if (use_path) {
 		char *path_var = getenv("PATH");
 		const char s[2] = ":";
