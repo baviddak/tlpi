@@ -11,6 +11,7 @@
 #include <stdarg.h>
 #include <stdbool.h>
 #include <sys/stat.h>
+#include <sys/wait.h>
 #include "tlpi_hdr.h"
 
 extern char **environ;
@@ -24,8 +25,7 @@ int my_execlp(const char *filename, const char *arg, ... /* , (char *)NULL*/) {
 	/* Track if we should use the PATH + filename or just filename */
 	bool use_path = false;
 
-	int pathname_len = strlen(filename);
-	char path[pathname_len];
+	char *path = (char *)malloc(strlen(filename) * sizeof(char));
 	strcpy(path, filename);
 
 	char *file = strrchr(path, '/');
