@@ -137,7 +137,7 @@ int main() {
 			errExit("fork");
 		case 0:
 			/* Un-comment only one of these to test my_execlp(). */
-			status = my_execlp("./test.exe", "my arg", "another", (char *)NULL );
+			status = my_execlp("./test.exe", "my arg", "another", "rewq", "wert", (char *)NULL );
 			// status = my_execlp("./test.exe", (char *)NULL );
 			// status = my_execlp("python3", "--version", (char *)NULL );
 			// status = my_execlp("gcc", "--help", (char *)NULL );
@@ -146,6 +146,5 @@ int main() {
 			wait(&status);
 			printf("The exit status is: %d\n", status);
 	}
-
 	return(EXIT_SUCCESS);
 }
