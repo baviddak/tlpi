@@ -102,7 +102,7 @@ int my_execlp(const char *filename, const char *arg, ... /* , (char *)NULL*/) {
 		const char s[2] = ":";
 		char *token;
 
-		/* Some variables needed for checking if executable. */
+		/* Needed for checking if executable. */
 		struct stat stat_buf;
 
 		token = strtok(path_var, s);
