@@ -17,7 +17,7 @@ int main(int argc, char *argv[]){
 	char ** ep;
 	printf("The env is:\n");
 	for (ep = environ; *ep != NULL; ep++){
-        printf("%s\n", *ep);
-    }
+		printf("%s\n", *ep);
+	}
 	return 0;
 }
