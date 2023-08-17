@@ -27,7 +27,6 @@ static struct file_types dir_stat;
 
 void print_stats() {
 	// print the statistics in a pretty way
-
 	double reg_p = ((double)dir_stat.reg_count / (double)dir_stat.total)*100;
 	double dir_p = ((double)dir_stat.dir_count / (double)dir_stat.total)*100; 
 	double char_p = ((double)dir_stat.char_count / (double)dir_stat.total)*100; 
@@ -36,7 +35,6 @@ void print_stats() {
 	double sock_p = ((double)dir_stat.sock_count / (double)dir_stat.total)*100; 
 	double lnk_p = ((double)dir_stat.lnk_count / (double)dir_stat.total)*100; 
 
-
 	printf("Regular file count: %d (%.2f percent)\n",dir_stat.reg_count, reg_p);
 	printf("Directory count: %d (%.2f percent)\n",dir_stat.dir_count, dir_p);
 	printf("Char device count: %d (%.2f percent)\n",dir_stat.char_count, char_p);
@@ -44,7 +42,6 @@ void print_stats() {
 	printf("FIFO or pipe count: %d (%.2f percent)\n",dir_stat.fifo_count, fifo_p);
 	printf("Socket count: %d (%.2f percent)\n",dir_stat.sock_count, sock_p);
 	printf("Symbolic link count: %d (%.2f percent)\n",dir_stat.lnk_count, lnk_p);
-
 }
 
 static int 
