@@ -4,7 +4,9 @@
  * argument and environmment vectors. Finally, note that an easy way of checking 
  * whether a file exists in a particular directory and is executable is simply 
  * to try execing the file.
-*/
+ */
+
+/* Usage: ./my_execlp.exe */
 
 #include <unistd.h>
 #include <string.h>

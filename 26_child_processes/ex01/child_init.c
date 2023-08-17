@@ -2,6 +2,8 @@
  * getppid() returns 1 (the process ID of init - systemd in newer systems).
  */
 
+/* Usage: ./child_init.exe */
+
 #include "tlpi_hdr.h"
 
 int main() {
