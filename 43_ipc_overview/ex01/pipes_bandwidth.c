@@ -89,7 +89,8 @@ int main (int argc, char *argv[]) {
 			end_time = clock();
 
 			double total_time = ((double)(end_time - start_time)) / ((double)CLOCKS_PER_SEC);
-			printf("The bandwidth is %f bytes per second.\n", (double)total_bytes_needed / total_time);
+			printf("The elapsed time is %f seconds.\n", total_time);
+			printf("The bandwidth is %.0f bytes per second.\n", (double)total_bytes_needed / total_time);
 	}
 	return 0;
 }
