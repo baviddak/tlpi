@@ -90,7 +90,7 @@ int main (int argc, char *argv[]) {
 
 			double total_time = ((double)(end_time - start_time)) / ((double)CLOCKS_PER_SEC);
 			printf("The elapsed time is %f seconds.\n", total_time);
-			printf("The bandwidth is %.0f bytes per second.\n", (double)total_bytes_needed / total_time);
+			printf("The bandwidth is %.0f bytes per second.\n", (double)total_bytes_read / total_time);
 	}
 	return 0;
 }
