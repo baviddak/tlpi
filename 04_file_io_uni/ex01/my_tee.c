@@ -1,4 +1,5 @@
-/* Implement tee using I/O system calls. Implement the -a command-line option
+/* 
+ * Implement tee using I/O system calls. Implement the -a command-line option
  * which causes tee to append to the end of a file if it already exists. (Refer
  * to Appendix B)
  */
