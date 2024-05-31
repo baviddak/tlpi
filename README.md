@@ -1,11 +1,12 @@
 # Answers to The Linux Programming Interface
 
-Here are my solutions for The Linux Programming Interface programming problems. 
-I worked on these sporadically over the past couple years when I wanted to code 
-something but didn't know where to start. These are not the complete and some 
-are straight up incorrect but I wanted to document them anyways. 
+Here are my solutions for *The Linux Programming Interface* programming 
+problems. I worked on these sporadically over the past couple years when I 
+wanted to code something but didn't know where to start. These were completed 
+for fun and should not be taken as complete or correct.
 
 ## Building the Code
+
 Building the code requires you to create a `libs/` folder at the root of this 
 project to house a few dependencies. To do this, you'll have to get the source 
 from [The Linux Programming Interface website][1] and follow the instructions to
