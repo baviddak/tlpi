@@ -1,9 +1,8 @@
 # Answers to The Linux Programming Interface
 
 Here are my solutions for *The Linux Programming Interface* programming 
-problems. I worked on these sporadically over the past couple years when I 
-wanted to code something but didn't know where to start. These were completed 
-for fun and should not be taken as complete or correct.
+problems. These were completed for fun and should not be taken as complete or 
+correct.
 
 ## Building the Code
 
