@@ -1,4 +1,5 @@
-/* ... This program should wopen the specified filename (creating if necessary)
+/* 
+ * ... This program should wopen the specified filename (creating if necessary)
  * and append num-bytes to the file by using write() to write a byte at a time. 
  * (cont'd)
  */

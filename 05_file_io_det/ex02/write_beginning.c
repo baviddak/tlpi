@@ -1,9 +1,11 @@
-/* Write a program that opens an existing file for writing with the O_APPEND 
+/* 
+ * Write a program that opens an existing file for writing with the O_APPEND 
  * flag, and then seeks to the beginning of the file before writing some data. 
  * Where does the data appear in the file? Why? 
  */
 
-/* Usage: ./write_beginning.exe file.txt
+/* 
+ * Usage: ./write_beginning.exe file.txt
  * Input a text to append
  * file.txt is the file to be written to 
  */
