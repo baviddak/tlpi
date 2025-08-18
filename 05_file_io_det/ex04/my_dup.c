@@ -1,4 +1,5 @@
-/* Implement dup() and dup2() using fcntl() and, where necessary, close(). (You 
+/* 
+ * Implement dup() and dup2() using fcntl() and, where necessary, close(). (You 
  * may ignore the fact that dup2() and fcntl() return different errno values for 
  * some error cases.) For dup2(), remember to handle the special case where 
  * oldfd equals newfd. In this case, you should check whether oldfd is valid, 
