@@ -1,4 +1,5 @@
-/* Write a progam that measures the bandwidth provided by pipes. As command-line 
+/* 
+ * Write a progam that measures the bandwidth provided by pipes. As command-line 
  * arguments, the program should accept the number of data blocks to be sent and 
  * the size of each data block. After creating a pipe, the program splts into 
  * two process: a child that writes the data blocks to the pipe as fast as 
