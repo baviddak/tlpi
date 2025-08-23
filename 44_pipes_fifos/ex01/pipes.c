@@ -86,6 +86,9 @@ int main () {
             for(;;) {
                 num_read = read(STDIN_FILENO, BUFFER, BUFFER_MAX);
 
+
+
+                // Write to the child
                 if (num_read == -1 ) {
                     errExit("read");
                 }
@@ -95,6 +98,13 @@ int main () {
                 if (write(parent_to_child_fd[1]), BUFFER, BUFFER_MAX) == -1) {
                     errExit("write")
                 }
+
+                // Read back from the child, print to STDOUT
+                if (read(child_to_parent_fd[0]), BUFFER, BUFFER_MAX) == -1) {
+                    errExit("write")
+                }
+
+
 
 
 
