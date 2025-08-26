@@ -128,7 +128,7 @@ int main () {
                 errExit("close");
             }
             printf("Successfully closed file descriptor 1 in child process\n");
-            if (close(child_to_parent_fd[0] == -1)) {
+            if (close(child_to_parent_fd[0]) == -1) {
                 // Close the read end of the child to parent pipe
                 errExit("close");
             }
@@ -168,7 +168,7 @@ int main () {
             }
 
             printf("Successfully closed file descriptor 1 in parent process\n");
-            if (close(child_to_parent_fd[1] == -1)) {
+            if (close(child_to_parent_fd[1]) == -1) {
                 // Close the write end of the child to parent pipe
                 errExit("close");
             }
