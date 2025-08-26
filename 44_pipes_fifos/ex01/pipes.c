@@ -7,6 +7,10 @@
  * echoes it on standard output before continuing around the loop once more.
  */
 
+/*
+ * Warning: this is the worst code every literally!
+*/
+
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -76,21 +80,16 @@ char upper_case (char input)
  }
 
 void lower_to_upper(char *lower, char *upper, int size) {
+    int i;
 
-    // int i;
-    for (int i = 0; i < size; i++ ) {
-        switch(lower[i]) {
-            case
-        }        
-
-
+    for (i = 0; i < size; i++ ) {
+        upper[i] = upper_case(lower[i]);
     }
-
 }
 
 int main () {
 
-    // int num_read;
+    int num_read;
 
     /* 0 is the read end; 1 is the write end */
 
@@ -117,60 +116,87 @@ int main () {
             errExit("fork");
         case 0:
 
-            int num_read_child;
+            // this does not have to be specific to the child - the parent and 
+            // child have their own copy of local variables but can share file
+            // descriptors
+            // int num_read_child;
+            printf("Entered the child process\n");
 
             /* Child process */
             if (close(parent_to_child_fd[1]) == -1) {
                 // Close the write end of the parent to child pipe
                 errExit("close");
             }
+            printf("Successfully closed file descriptor 1 in child process\n");
             if (close(child_to_parent_fd[0] == -1)) {
                 // Close the read end of the child to parent pipe
                 errExit("close");
             }
+
+            printf("Successfully closed file descriptor 2 in child process\n");
             
             for (;;) {
                 // Read from the appropriate pipe end 
+                num_read = read(parent_to_child_fd[0], BUFFER, BUFFER_MAX);
+
+                if ( num_read == -1 ) {
+                    errExit("read");
+                }
+                if ( num_read == 0 ) {
+                    break;
+                }
+
+                // Convert to upper case
+                lower_to_upper(BUFFER, BUFFER_UPPER_CASE, BUFFER_MAX);
+
+
+                if (write(child_to_parent_fd[1], BUFFER_UPPER_CASE, BUFFER_MAX) == -1) {
+                    errExit("write");
+                }
 
             }
 
         case 1:
 
-            int num_read_parent;
+            // int num_read_parent;
+            printf("Entered the parent process\n");
 
             /* Parent process */
             if (close(parent_to_child_fd[0]) == -1) {
                 // Close the read end of the parent to child pipe
                 errExit("close");
             }
+
+            printf("Successfully closed file descriptor 1 in parent process\n");
             if (close(child_to_parent_fd[1] == -1)) {
                 // Close the write end of the child to parent pipe
                 errExit("close");
             }
 
+            printf("Successfully closed file descriptor 2 in parent process\n");
+
             // Read from stdin - pass to the child process
             for(;;) {
-                num_read_parent = read(STDIN_FILENO, BUFFER, BUFFER_MAX);
+                num_read = read(STDIN_FILENO, BUFFER, BUFFER_MAX);
 
                 // Write to the child
-                if ( num_read_parent == -1 ) {
+                if ( num_read == -1 ) {
                     errExit("read");
                 }
-                if ( num_read_parent == 0 ) {
+                if ( num_read == 0 ) {
                     break;
                 }
-                if (write(parent_to_child_fd[1]), BUFFER, BUFFER_MAX) == -1) {
-                    errExit("write")
+                if (write(parent_to_child_fd[1], BUFFER, BUFFER_MAX) == -1) {
+                    errExit("write");
                 }
 
                 // Read back from the child, print to STDOUT
-                if (read(child_to_parent_fd[0]), BUFFER, BUFFER_MAX) == -1) {
-                    errExit("write")
+                if (read(child_to_parent_fd[0], BUFFER, BUFFER_MAX) == -1) {
+                    errExit("write");
                 }
 
+                printf("%s\n", BUFFER);
 
             }
-
     }
-
 }
