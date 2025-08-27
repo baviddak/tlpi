@@ -146,6 +146,8 @@ int main () {
                     break;
                 }
 
+                printf("Read some data in the child\n");
+
                 // Convert to upper case
                 lower_to_upper(BUFFER, BUFFER_UPPER_CASE, BUFFER_MAX);
 
@@ -186,8 +188,11 @@ int main () {
                 if ( num_read == 0 ) {
                     break;
                 }
+                
+                printf("Read some data in the parent\n");
+
                 if (write(parent_to_child_fd[1], BUFFER, BUFFER_MAX) == -1) {
-                    errExit("write");
+                    errExit("write - yo");
                 }
 
                 // Read back from the child, print to STDOUT
