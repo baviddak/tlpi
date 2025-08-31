@@ -87,9 +87,49 @@ void lower_to_upper(char *lower, char *upper, int size) {
     }
 }
 
+
+void read_write_logic(int parent_to_child_fd[], int child_to_parent_fd[], int fork_ret) {
+
+
+    if (fork_ret == 1) {
+        // Parent process
+
+        if (close(parent_to_child_fd[0]) == -1) {
+                // Close the read end of the parent to child pipe
+                errExit("close");
+            }
+
+            printf("Successfully closed file descriptor 1 in parent process\n");
+            if (close(child_to_parent_fd[1]) == -1) {
+                // Close the write end of the child to parent pipe
+                errExit("close");
+            }
+
+
+
+    } else if (fork_ret == 0) {
+
+        /* Child process */
+            if (close(parent_to_child_fd[1]) == -1) {
+                // Close the write end of the parent to child pipe
+                errExit("close");
+            }
+            printf("Successfully closed file descriptor 1 in child process\n");
+            if (close(child_to_parent_fd[0]) == -1) {
+                // Close the read end of the child to parent pipe
+                errExit("close");
+            }
+
+    }
+
+    printf("The PID is %ld\n", (long)getpid());
+
+}
+
 int main () {
 
-    int num_read;
+    //int num_read;
+    int fork_pid;
 
     /* 0 is the read end; 1 is the write end */
 
@@ -108,100 +148,20 @@ int main () {
     }
 
     /* Buffer for the text read in */
-    char BUFFER[BUFFER_MAX];
-    char BUFFER_UPPER_CASE[BUFFER_MAX];
-
-    switch(fork()) {
-        case -1:
-            errExit("fork");
-        case 0:
-
-            // this does not have to be specific to the child - the parent and 
-            // child have their own copy of local variables but can share file
-            // descriptors
-            // int num_read_child;
-            printf("Entered the child process\n");
-
-            /* Child process */
-            if (close(parent_to_child_fd[1]) == -1) {
-                // Close the write end of the parent to child pipe
-                errExit("close");
-            }
-            printf("Successfully closed file descriptor 1 in child process\n");
-            if (close(child_to_parent_fd[0]) == -1) {
-                // Close the read end of the child to parent pipe
-                errExit("close");
-            }
-
-            printf("Successfully closed file descriptor 2 in child process\n");
-            
-            for (;;) {
-                // Read from the appropriate pipe end 
-                num_read = read(parent_to_child_fd[0], BUFFER, BUFFER_MAX);
-
-                if ( num_read == -1 ) {
-                    errExit("read");
-                }
-                if ( num_read == 0 ) {
-                    break;
-                }
-
-                printf("Read some data in the child\n");
-
-                // Convert to upper case
-                lower_to_upper(BUFFER, BUFFER_UPPER_CASE, BUFFER_MAX);
+    // char BUFFER[BUFFER_MAX];
+    // char BUFFER_UPPER_CASE[BUFFER_MAX];
 
 
-                if (write(child_to_parent_fd[1], BUFFER_UPPER_CASE, BUFFER_MAX) == -1) {
-                    errExit("write");
-                }
-
-            }
-
-        case 1:
-
-            // int num_read_parent;
-            printf("Entered the parent process\n");
-
-            /* Parent process */
-            if (close(parent_to_child_fd[0]) == -1) {
-                // Close the read end of the parent to child pipe
-                errExit("close");
-            }
-
-            printf("Successfully closed file descriptor 1 in parent process\n");
-            if (close(child_to_parent_fd[1]) == -1) {
-                // Close the write end of the child to parent pipe
-                errExit("close");
-            }
-
-            printf("Successfully closed file descriptor 2 in parent process\n");
-
-            // Read from stdin - pass to the child process
-            for(;;) {
-                num_read = read(STDIN_FILENO, BUFFER, BUFFER_MAX);
-
-                // Write to the child
-                if ( num_read == -1 ) {
-                    errExit("read");
-                }
-                if ( num_read == 0 ) {
-                    break;
-                }
-                
-                printf("Read some data in the parent\n");
-
-                if (write(parent_to_child_fd[1], BUFFER, BUFFER_MAX) == -1) {
-                    errExit("write - yo");
-                }
-
-                // Read back from the child, print to STDOUT
-                if (read(child_to_parent_fd[0], BUFFER, BUFFER_MAX) == -1) {
-                    errExit("write");
-                }
-
-                printf("%s\n", BUFFER);
-
-            }
+    fork_pid = fork();
+    if (fork_pid == -1) {
+        errExit("fork");
     }
+
+
+    read_write_logic(parent_to_child_fd, child_to_parent_fd, fork_pid);
+
+
+    printf("Here is one PID: %ld\n", (long)getpid());
+
+    
 }

@@ -12,7 +12,7 @@ SRC = pipes.c
 
 # Compile
 pipes.exe: $(SRC) $(ARCH) 
-	$(CC) $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) -g -O0 -o $@ $^
 
 clean: 
 	rm -f core pipes.exe
