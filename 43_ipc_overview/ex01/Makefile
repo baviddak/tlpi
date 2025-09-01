@@ -14,5 +14,7 @@ SRC = pipes_bandwidth.c
 pipes_bandwidth.exe: $(SRC) $(ARCH) 
 	$(CC) $(CFLAGS) -o $@ $^
 
+.PHONY: clean
+
 clean: 
 	rm -f core pipes_bandwidth.exe
