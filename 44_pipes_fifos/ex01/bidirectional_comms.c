@@ -1,3 +1,7 @@
+/* Write a program that uses two pipes to enable bidirectional communication
+ * between a parent and child process.
+ */
+
 #include <unistd.h>
 
 #include "tlpi_hdr.h"
@@ -18,83 +22,107 @@ void convert_to_lower(char source[], char destination[], int size) {
 
 			case 'a': 
 				destination[i] = 'A';
+				break;
 			case 'b': 
 				destination[i] = 'B';
+				break;
 
 			case 'c':
 				destination[i] = 'C';
+				break;
 
 			case 'd':
 				destination[i] = 'D';
+				break;
 
 			case 'e':
 				 destination[i] = 'E';
+				 break;
 
 			case 'f':
 				 destination[i] = 'F';
+				 break;
 
 			case 'g':
 				 destination[i] = 'G';
+				 break;
 
 			case 'h':
 				 destination[i] = 'H';
+				 break;
 
 			case 'i':
 				 destination[i] = 'I';
+				 break;
 
 			case 'k':
 				 destination[i] = 'K';
+				 break;
 
 			case 'l':
 				 destination[i] = 'L';
+				 break;
 
 			case 'm':
 				 destination[i] = 'M';
+				 break;
 
 			case 'n':
 				 destination[i] = 'N';
+				 break;
 
 			case 'o':
 				 destination[i] = 'O';
+				 break;
 
 			case 'p':
 				 destination[i] = 'P';
+				 break;
 
 			case 'r':
 				 destination[i] = 'R';
+				 break;
 
 			case 's':
 				 destination[i] = 'S';
+				 break;
 
 			case 't':
 				 destination[i] = 'T';
+				 break;
 
 			case 'u':
-				 printf("u was hit\n");
 				 destination[i] = 'U';
+				 break;
 
 			case 'v':
 				 destination[i] = 'V';
+				 break;
 
 			case 'w':
 				 destination[i] = 'W';
+				 break;
 
 			case 'x':
 				 destination[i] = 'X';
+				 break;
 
 			case 'y':
 				 destination[i] = 'Y';
+				 break;
 
 			case 'z':
 				 destination[i] = 'Z';
+				 break;
 
 			default:
 				destination[i] = source[i];
+				break;
 		}
 
 	}
 
-	printf("%s\n", destination);
+	// printf("%s\n", destination);
 	
 }
 
