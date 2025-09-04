@@ -140,7 +140,6 @@ int main () {
 	ssize_t num_read;
 	ssize_t num_written;
 
-
 	if (pipe(parent_to_child) == -1) {
 		errExit("pipe");
 	}
@@ -233,9 +232,6 @@ int main () {
 
 
 			}
-
-
-
 			break;
 	}
 
