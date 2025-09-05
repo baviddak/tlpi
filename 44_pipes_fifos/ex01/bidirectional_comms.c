@@ -16,7 +16,7 @@ void convert_to_lower(char source[], char destination[], int size) {
 
 	int i = 0;
 
-	for ( i = 0; i < size ; i++) {
+	for ( i = 0; i < size ; i++ ) {
 		
 		switch(source[i]) {
 
@@ -78,6 +78,10 @@ void convert_to_lower(char source[], char destination[], int size) {
 			case 'p':
 				 destination[i] = 'P';
 				 break;
+                        case 'q':
+				 destination[i] = 'Q';
+				 break;
+
 
 			case 'r':
 				 destination[i] = 'R';
