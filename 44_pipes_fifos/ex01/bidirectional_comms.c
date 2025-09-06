@@ -2,6 +2,8 @@
  * between a parent and child process.
  */
 
+/* Usage ./bidirectional_comms < sample.txt */
+
 #include <unistd.h>
 
 #include "tlpi_hdr.h"
