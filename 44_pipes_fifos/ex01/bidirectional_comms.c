@@ -8,235 +8,210 @@
 
 #define BUFFER_MAX 100
 
+void convert_to_lower(char source[], char destination[], int size);
 
-/* Note: try creating a Stream interface in C */
+int main() {
+  /* create a buffer to store the read in bytes */
+  char buffer[BUFFER_MAX];
+  char alt_buffer[BUFFER_MAX];
 
+  /* 0 is the read end, 1 is the write end */
+  int parent_to_child[2];
+  int child_to_parent[2];
 
-void convert_to_lower(char source[], char destination[], int size) {
+  ssize_t num_read;
+  ssize_t num_written;
 
-	int i = 0;
+  if (pipe(parent_to_child) == -1) {
+    errExit("pipe");
+  }
 
-	for ( i = 0; i < size ; i++ ) {
-		
-		switch(source[i]) {
+  if (pipe(child_to_parent) == -1) {
+    errExit("pipe");
+  }
 
-			case 'a': 
-				destination[i] = 'A';
-				break;
-			case 'b': 
-				destination[i] = 'B';
-				break;
+  switch (fork()) {
+    case -1:
+      /* Error */
+      errExit("fork");
+    case 0:
+      /* Child process */
 
-			case 'c':
-				destination[i] = 'C';
-				break;
+      if (close(parent_to_child[1]) == -1) {
+        errExit("close");
+      }
+      if (close(child_to_parent[0]) == -1) {
+        errExit("close");
+      }
 
-			case 'd':
-				destination[i] = 'D';
-				break;
+      /* Continuously read from the pipe, convert and send back the bits */
+      for (;;) {
+        num_read = read(parent_to_child[0], buffer, BUFFER_MAX);
 
-			case 'e':
-				 destination[i] = 'E';
-				 break;
+        if (num_read == -1) {
+          errExit("read");
+        }
 
-			case 'f':
-				 destination[i] = 'F';
-				 break;
+        convert_to_lower(buffer, alt_buffer, num_read);
 
-			case 'g':
-				 destination[i] = 'G';
-				 break;
+        num_written = write(child_to_parent[1], alt_buffer, BUFFER_MAX);
+        if (num_written == -1) {
+          errExit("write");
+        }
+      }
 
-			case 'h':
-				 destination[i] = 'H';
-				 break;
+      break;
+    default:
+      /* Parent process */
+      if (close(parent_to_child[0]) == -1) {
+        errExit("close");
+      }
+      if (close(child_to_parent[1]) == -1) {
+        errExit("close");
+      }
 
-			case 'i':
-				 destination[i] = 'I';
-				 break;
+      /* Continuously read in from stdin, write to the pipe */
+      for (;;) {
+        /* Read in, pass the data to the child throught the pipe */
 
-			case 'k':
-				 destination[i] = 'K';
-				 break;
+        num_read = read(STDIN_FILENO, buffer, BUFFER_MAX);
 
-			case 'l':
-				 destination[i] = 'L';
-				 break;
+        if (num_read == -1) {
+          errExit("read");
+        }
+        if (num_read == 0) {
+          break;
+        }
 
-			case 'm':
-				 destination[i] = 'M';
-				 break;
+        num_written = write(parent_to_child[1], buffer, BUFFER_MAX);
 
-			case 'n':
-				 destination[i] = 'N';
-				 break;
+        if (num_written == -1) {
+          errExit("write");
+        }
 
-			case 'o':
-				 destination[i] = 'O';
-				 break;
+        /* Read back from child, pass the data to STDOUT */
+        num_read = read(child_to_parent[0], buffer, BUFFER_MAX);
 
-			case 'p':
-				 destination[i] = 'P';
-				 break;
-                        case 'q':
-				 destination[i] = 'Q';
-				 break;
+        if (num_read == -1) {
+          errExit("read");
+        }
 
+        num_written = write(STDOUT_FILENO, buffer, BUFFER_MAX);
 
-			case 'r':
-				 destination[i] = 'R';
-				 break;
-
-			case 's':
-				 destination[i] = 'S';
-				 break;
-
-			case 't':
-				 destination[i] = 'T';
-				 break;
-
-			case 'u':
-				 destination[i] = 'U';
-				 break;
-
-			case 'v':
-				 destination[i] = 'V';
-				 break;
-
-			case 'w':
-				 destination[i] = 'W';
-				 break;
-
-			case 'x':
-				 destination[i] = 'X';
-				 break;
-
-			case 'y':
-				 destination[i] = 'Y';
-				 break;
-
-			case 'z':
-				 destination[i] = 'Z';
-				 break;
-
-			default:
-				destination[i] = source[i];
-				break;
-		}
-
-	}
-
-	// printf("%s\n", destination);
-	
+        if (num_written == -1) {
+          errExit("write");
+        }
+      }
+      break;
+  }
 }
 
-int main () {
+void convert_to_lower(char source[], char destination[], int size) {
+  int i = 0;
 
-	/* create a buffer to store the read in bytes */
-	char buffer[BUFFER_MAX];
-	char alt_buffer[BUFFER_MAX];
+  for (i = 0; i < size; i++) {
+    switch (source[i]) {
+      case 'a':
+        destination[i] = 'A';
+        break;
+      case 'b':
+        destination[i] = 'B';
+        break;
 
+      case 'c':
+        destination[i] = 'C';
+        break;
 
-	/* 0 is the read end, 1 is the write end */
-	int parent_to_child[2];
-	int child_to_parent[2];
+      case 'd':
+        destination[i] = 'D';
+        break;
 
-	ssize_t num_read;
-	ssize_t num_written;
+      case 'e':
+        destination[i] = 'E';
+        break;
 
-	if (pipe(parent_to_child) == -1) {
-		errExit("pipe");
-	}
+      case 'f':
+        destination[i] = 'F';
+        break;
 
-	if (pipe(child_to_parent) == -1) {
-		errExit("pipe");
-	}
+      case 'g':
+        destination[i] = 'G';
+        break;
 
+      case 'h':
+        destination[i] = 'H';
+        break;
 
-	switch(fork()) {
+      case 'i':
+        destination[i] = 'I';
+        break;
 
-		case -1:
-			/* Error */
-			errExit("fork");
-		case 0:
-			/* Child process */
+      case 'k':
+        destination[i] = 'K';
+        break;
 
+      case 'l':
+        destination[i] = 'L';
+        break;
 
-			if (close(parent_to_child[1]) == -1) {
-				errExit("close");
-			}
-			if (close(child_to_parent[0]) == -1) {
-				errExit("close");
-			}
+      case 'm':
+        destination[i] = 'M';
+        break;
 
-			/* Continuously read from the pipe, convert and send back the bits */
-			for (;;) {
+      case 'n':
+        destination[i] = 'N';
+        break;
 
-				num_read = read(parent_to_child[0], buffer, BUFFER_MAX);
+      case 'o':
+        destination[i] = 'O';
+        break;
 
-				if (num_read == -1) {
-					errExit("read");
-				}
+      case 'p':
+        destination[i] = 'P';
+        break;
+      case 'q':
+        destination[i] = 'Q';
+        break;
 
-				convert_to_lower(buffer, alt_buffer, num_read);
+      case 'r':
+        destination[i] = 'R';
+        break;
 
-				num_written = write(child_to_parent[1], alt_buffer, BUFFER_MAX);
-				if (num_written == -1) {
-					errExit("write");
-				}
+      case 's':
+        destination[i] = 'S';
+        break;
 
+      case 't':
+        destination[i] = 'T';
+        break;
 
-			}
+      case 'u':
+        destination[i] = 'U';
+        break;
 
-			break;
-		default:
-			/* Parent process */
-			if (close(parent_to_child[0]) == -1) {
-				errExit("close");
-			}
-			if (close(child_to_parent[1]) == -1) {
-				errExit("close");
-			}
+      case 'v':
+        destination[i] = 'V';
+        break;
 
+      case 'w':
+        destination[i] = 'W';
+        break;
 
-			/* Continuously read in from stdin, write to the pipe */
-			for (;;) {
+      case 'x':
+        destination[i] = 'X';
+        break;
 
+      case 'y':
+        destination[i] = 'Y';
+        break;
 
-				/* Read in, pass the data to the child throught the pipe */
+      case 'z':
+        destination[i] = 'Z';
+        break;
 
-				num_read = read(STDIN_FILENO, buffer, BUFFER_MAX);
-
-				if (num_read == -1) {
-					errExit("read");
-				}
-				if (num_read == 0) {
-					break;
-				}
-
-				num_written = write(parent_to_child[1], buffer, BUFFER_MAX);
-
-				if (num_written == -1){
-					errExit("write");
-				}
-
-
-				/* Read back from child, pass the data to STDOUT */
-				num_read = read(child_to_parent[0], buffer, BUFFER_MAX);
-
-				if (num_read == -1) {
-					errExit("read");
-				}
-
-				num_written = write(STDOUT_FILENO, buffer, BUFFER_MAX);
-
-				if (num_written == -1) {
-					errExit("write");
-				}
-
-
-			}
-			break;
-	}
-
+      default:
+        destination[i] = source[i];
+        break;
+    }
+  }
 }
