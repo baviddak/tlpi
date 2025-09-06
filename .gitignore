@@ -2,3 +2,5 @@
 *.exe
 libs/*
 .vscode/*
+*bidirectional_comms
+*.asm
