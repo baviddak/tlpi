@@ -3,6 +3,9 @@
 
 /* Rename these to my_popen and my_pclose to avoid a double definition error */
 
+
+/* use fdopen to create a file stream without having to provide a filename */
+
 FILE *my_popen(const char *, const char *);
 int my_pclose(FILE *);
 
@@ -15,7 +18,13 @@ int main() {
 	return 0;
 }
 
+
+
 FILE *my_popen(const char *command, const char *mode) {
+
+
+	FILE *stream;
+	int status;
 
 	/* Before anything, validate the mode*/
 	if (strcmp(mode, "r") != 0 || strcmp(mode, "w") != 0) {
@@ -29,10 +38,52 @@ FILE *my_popen(const char *command, const char *mode) {
 		errExit("pipe");
 	}
 
-
-
-
 	/* Secondly, fork the process */
+	switch(fork()) {
+		case -1:
+			errExit("fork");
+		case 0:
+			/* Child process */
+
+
+			if (strcmp(mode, "r")) {
+				/* read mode, so the child is writing to the pipe, 
+				 * the parent is reading from */
+
+				/* execve the /usr/bin/bash with the arg in command */
+
+				char *argv[] = {NULL};
+				char *environ[] = {NULL};
+
+
+				if (close(pfd[0]) == -1) {
+					errExit("close");
+				}
+
+
+				if ( execve("/bin/sh", argv, environ) == -1) {
+					errExit("execve");
+				}
+
+
+
+				/* Bind the pipe fd to the stdout ? */
+
+
+
+			} else {
+
+			}
+
+			break;
+		default:
+			/* Parent process */
+			if (strcmp(mode, "r")) {
+
+			}
+			wait(&status);
+			break;
+	}
 
 
 	/* Thirdly, from the child process, if the mode is r, 
@@ -47,5 +98,4 @@ FILE *my_popen(const char *command, const char *mode) {
 int my_pclose(FILE *){
 
 	/* Simply close the FD associated with this FILE stream */
-
 }
