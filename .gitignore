@@ -4,3 +4,6 @@ libs/*
 .vscode/*
 *bidirectional_comms
 *.asm
+*scratch/
+*verify_ftok
+*sample_file
