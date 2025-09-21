@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
 	}
 
 
-	/* Allocate the stat buffer */
+	/* Instantiate the stat buffer */
 	struct stat stat_buffer;
 
 	/* Generate the key */
