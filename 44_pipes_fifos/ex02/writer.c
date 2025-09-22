@@ -8,14 +8,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
 
 /* stdout is a file pointer that can be used */
 
 int main() {
 
+
+	size_t num_written;
+
 	char *write_string = "This is some text that I am writing!!\n";
 
-	fwrite(write_string, sizeof(char), strlen(write_string), stdout);
+
+	while (1) 
+	{
+		num_written = fwrite(write_string, sizeof(char), strlen(write_string), stdout);
+		if (num_written <= 0) {
+			fprintf(stderr, "%s\n", strerror(errno));
+			break;
+		}
+
+		if (num_written == strlen(write_string)) {
+			break;
+		}
+
+	}
+
 
 	return 0;
 }

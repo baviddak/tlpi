@@ -15,7 +15,6 @@
 
 int main () {
 
-
 	int flags = O_RDWR | O_APPEND | O_CREAT;
 	int perms = S_IRUSR | S_IWUSR;
 
@@ -29,14 +28,14 @@ int main () {
 		num_read = fread(buffer, sizeof(char), BUFFER_MAX, stdin);
 
 		if (num_read <= 0) {
-			fprintf(stderr, "The error is %s\n", strerror(errno));
+			fprintf(stderr, "%s\n", strerror(errno));
 			break;
 		}
 
 		num_written = write(fd, buffer, strlen(buffer));
 
 		if (num_written <= 0) {
-			fprintf(stderr, "The error is %s\n", strerror(errno));
+			fprintf(stderr, "%s\n", strerror(errno));
 			break;
 		}
 

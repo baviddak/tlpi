@@ -12,7 +12,5 @@ int main () {
 
 	num_written = fwrite(buffer, sizeof(char), strlen(buffer) + 1, fp);
 
-
-
 	return 0;
 }
