@@ -8,3 +8,6 @@ libs/*
 *verify_ftok
 *sample_file
 *test0*
+*reader
+*writer
+*std_popen
