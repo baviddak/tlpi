@@ -50,7 +50,6 @@ int main() {
 			if (write(STDOUT_FILENO, buf, num_read) != num_read) {
 				return -1;
 			}
-
 		}
 
 		if (num_read == -1) {
@@ -60,7 +59,6 @@ int main() {
 		if (close(client_fd) == -1) {
 			return -1;
 		}
-
 	}
 
 	return 0;
