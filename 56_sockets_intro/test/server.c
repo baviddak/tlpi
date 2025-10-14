@@ -45,7 +45,6 @@ int main() {
 			return -1;
 		}
 
-
 		while ((num_read = read(client_fd, buf, BUF_SIZE)) > 0) {
 
 			if (write(STDOUT_FILENO, buf, num_read) != num_read) {

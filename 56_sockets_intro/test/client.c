@@ -25,11 +25,9 @@ int main() {
     }
     /* Copy stdin to socket */
     while ((num_read = read(STDIN_FILENO, buf, BUF_SIZE)) > 0) {
-
         if (write(sfd, buf, num_read) != num_read) {
             return -1;
         }
-
     }
     
     if (num_read == -1) {
