@@ -12,3 +12,5 @@ libs/*
 *writer
 *std_popen
 *a.out
+*server
+*client
