@@ -24,9 +24,11 @@ int main(int argc, char *argv[]) {
 
 
 	/* Check if the file exists, using fstat? */
-	if (remove(SOCK_FILEPATH) == -1 && errno != ENOENT) {
-		fprintf(stderr, "Unable to remove pre-existing socket file.\n");
-		exit(EXIT_FAILURE);
+	if (remove(SOCK_FILEPATH) == -1) {
+		if (errno != ENOENT) {
+			fprintf(stderr, "Unable to remove pre-existing socket file.\n");
+			exit(EXIT_FAILURE);
+		}
 	}
 
 	if ((sockfd = socket(AF_UNIX, SOCK_STREAM, 0)) == -1) {
