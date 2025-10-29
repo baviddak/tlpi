@@ -18,6 +18,8 @@ int main (int argc, char *argv[]) {
 	char buf[MAX_BUFF];
 	memset(buf, 0, sizeof(buf));
 
+	// char * heap_buf = (char *)malloc(4096);
+
 	/* fprintf(stdout, "The size of the buffer is %ld\n", sizeof(path)); */
 	memset(path, 0, sizeof(path));
 	snprintf(path, sizeof(path) - 1, PATHSTR, (long) pid);
