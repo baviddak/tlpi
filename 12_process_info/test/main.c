@@ -22,7 +22,6 @@ int main (int argc, char *argv[]) {
 	memset(path, 0, sizeof(path));
 	snprintf(path, sizeof(path) - 1, PATHSTR, (long) pid);
 
-
 	if ((status_fd = open(path, flags)) < 0) {
 		fprintf(stderr, "Error opening the status file.\n");
 		exit(EXIT_FAILURE);
