@@ -20,7 +20,7 @@ int main() {
 
 	char buffer[BUFFER_MAX];
 
-	snprintf(buffer, BUFFER_MAX, "This is some random text yall!!!");
+	snprintf(buffer, BUFFER_MAX, "Interesting info\n\n\n\nThis is some random text yall!!!");
 
 	if (fd == -1){
 		fprintf(stderr, "Error opening the FIFO in the writer\n");
