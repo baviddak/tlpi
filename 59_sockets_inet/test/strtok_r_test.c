@@ -15,7 +15,7 @@ int main (int argc, char *argv[]) {
 
 	/* */
 	if (argc < 2 || strcmp("--help", argv[1]) == 0 || strcmp("-h", argv[1]) == 0) {
-		fprintf(stderr, "Usage: %s <filename>", argv[0]);
+		fprintf(stderr, "Usage: %s <filename>\n", argv[0]);
 		exit(EXIT_FAILURE);
 	}
 
