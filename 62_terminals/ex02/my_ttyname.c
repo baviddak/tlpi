@@ -12,8 +12,9 @@
 char *my_ttyname(int fd) {
 
 	/* Allocate some space on the heap for the return val */
-	char *returnstr = (char *)malloc(256 * sizeof(char));
-	memset(returnstr, 0, 256);
+	int buffer_size = 256;
+	char *returnstr = (char *)malloc(buffer_size * sizeof(char));
+	memset(returnstr, 0, buffer_size);
 
 	/* Retrieve the device ID from the file descriptor. */
 	struct stat sb;
@@ -38,7 +39,7 @@ char *my_ttyname(int fd) {
 
 	while ( (drs = readdir(devdirp)) != NULL ) {
 
-		snprintf(returnstr, 256 - 1, "%s%s", searchdirs[0], drs->d_name);
+		snprintf(returnstr, buffer_size - 1, "%s%s", searchdirs[0], drs->d_name);
 
 		if ( stat(returnstr, &sb) == -1 ) {
 			fprintf(stderr, "Error calling stat(): %s\n", strerror(errno));
