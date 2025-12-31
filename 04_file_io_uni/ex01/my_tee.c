@@ -29,42 +29,32 @@ int main(int argc, char * argv[]){
 	int opt;
 	char * output_filename;
 	
-	/* printf("The number of arguments is %d\n", argc); */
-	/* for(int i=0; i<argc; i++){ */
-	/*   printf("%s\n", argv[i]); */
-	/* } */
-  
-	if ((argc > 3) /* || (strcmp(argv[1], "--help")) */){
+	if ( argc > 3 || strcmp(argv[1], "--help") == 0 ){
 		usageErr("%s [-a] output_file < input_file", argv[0]);
 	}
 
-	while((opt = getopt(argc, argv, ":a")) != -1){
-		switch(opt){
+	while( (opt = getopt(argc, argv, ":a")) != -1 ){
+		switch (opt) {
 			case 'a':
 				output_flags = O_WRONLY | O_CREAT | O_APPEND;
 		}
 	}
 
-	/* if(output_flags & O_APPEND ) { */
-	/*   printf("writes are appended\n"); */
-	/* } */
-
-	if(optind < argc) {
+	if ( optind < argc ) {
 		output_filename = argv[optind];
-		/* printf("the output filename is %s\n", output_filename); */
 	}
 
 	outputfd = open(output_filename, output_flags, file_perms);
 
-	if(outputfd == -1){
+	if ( outputfd == -1 ) {
 		errExit("opening file %s", output_filename);
 	}
 	
-	while((num_read = read(STDIN_FILENO, buf, BUFFER_MAX)) > 0){
-		if(write(outputfd, buf, num_read) != num_read){
+	while ( (num_read = read(STDIN_FILENO, buf, BUFFER_MAX)) > 0 ){
+		if ( write(outputfd, buf, num_read) != num_read ) {
 			fatal("couldn't write whole buffer to output file");
 		}
-		if(write(STDOUT_FILENO, buf, num_read) != num_read){
+		if( write(STDOUT_FILENO, buf, num_read) != num_read ){
 			fatal("couldn't write buffer to standard out");
 		}
 	}
@@ -74,9 +64,9 @@ int main(int argc, char * argv[]){
 	}
 	
 	/* close the output file descriptor */
-	if (close(outputfd) == -1) {
+	if ( close(outputfd) == -1 ) {
 		errExit("close");
 	}
 	
-	return(EXIT_SUCCESS);
+	exit(EXIT_SUCCESS);
 }
