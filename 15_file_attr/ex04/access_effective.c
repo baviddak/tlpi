@@ -17,10 +17,10 @@ int access_eff (const char *pathname, int mode) {
 	gid_t p_egid = getegid();
 
 	// allocate the stat buffer
-	struct stat *stat_buf = (struct stat *)malloc(sizeof(struct stat));
+	struct stat stat_buf;
 
 	// call stat
-	if (stat(pathname, stat_buf) == -1) {
+	if (stat(pathname, &stat_buf) == -1) {
 		errExit("stat");
 	}
 
